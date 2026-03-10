@@ -5,6 +5,13 @@ namespace Djalone\KkmServerClasses\Cheque\Items\Barcode;
 class BarCodeEAN13 extends BarCode
 {
 
+    /**
+     * Конструктор штрих-кода EAN13 с проверкой контрольной цифры.
+     *
+     * @param string $barcode 13-значный штрихкод.
+     * @throws \InvalidArgumentException при неверной длине или формате.
+     * @throws \Exception при несовпадении контрольной цифры.
+     */
     public function __construct(string $barcode)
     {
         $this->type = 'EAN13';

@@ -1,16 +1,45 @@
 <?php
 
 namespace Djalone\KkmServerClasses\Cheque\Items;
-
+/**
+ * Класс элемента текста.
+ */
 class Text extends Item
 {
+    /**
+     * Размер шрифта (0–4).
+     */
     private int $fontSize = 0;
+    /**
+     * Интенсивность текста (0–15).
+    */
     private int $intensity = 0;
 
-    public function __construct(private readonly string $text)
+    /**
+     * Конструктор элемента текста.
+     *
+     * @param string $text Содержимое текста (по умолчанию пустая строка).
+     */
+    public function __construct(private string $text='')
     {
     }
-
+    /**
+     * Установить текст.
+     *
+     * @param string $text
+     * @return static
+     */
+    public function setText(string $text): static
+    {
+        $this->text = $text;
+        return $this;
+    }
+    /**
+     * Установить размер шрифта (0–4).
+     *
+     * @param int $fontSize
+     * @return static
+     */
     public function setFont(int $fontSize): static
     {
         if ($fontSize < 0) {
@@ -24,6 +53,12 @@ class Text extends Item
         return $this;
     }
 
+    /**
+     * Установить интенсивность (0–15).
+     *
+     * @param int $intensity
+     * @return static
+     */
     public function setIntensity(int $intensity): static
     {
 
@@ -37,6 +72,36 @@ class Text extends Item
         $this->intensity = $intensity;
         return $this;
     }
+
+    /**
+     * @return int Размер шрифта.
+     */
+    public function getFontSize(): int
+    {
+        return $this->fontSize;
+    }
+
+    /**
+     * @return int Интенсивность текста.
+     */
+    public function getIntensity(): int
+    {
+        return $this->intensity;
+    }
+
+    /**
+     * @return string Содержимое текста.
+     */
+    public function getText(): string
+    {
+        return $this->text;
+    }
+
+    /**
+     * Преобразовать текстовый элемент в массив для печати.
+     *
+     * @return array<string, array<string, string|int>>
+     */
     public function toArray(): array
     {
         return [
