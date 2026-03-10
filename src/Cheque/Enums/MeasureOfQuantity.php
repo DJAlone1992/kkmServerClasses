@@ -2,7 +2,9 @@
 
 namespace Djalone\KkmServerClasses\Cheque\Enums;
 
-
+/**
+ * Единицы измерения
+ */
 enum MeasureOfQuantity: int
 {
 

@@ -1,7 +1,9 @@
 <?php
 
 namespace Djalone\KkmServerClasses\Cheque\Enums;
-// Тип чека, Тег 1054;
+/**
+ * Тип чека, Тег 1054;
+ */
 enum ChequeType: int
 {
 
