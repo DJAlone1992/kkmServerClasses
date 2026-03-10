@@ -17,4 +17,16 @@ class Helper
 	{
 		return number_format($value / 10 ** $precision, $precision, '.', '');
 	}
+	/**
+	 * Преобразовать строку с плавающей точкой в целое значение с заданной точностью.
+	 *
+	 * @param float $value     Значение в виде строки с плавающей точкой.
+	 * @param int $precision  Количество десятичных знаков.
+	 * @return int
+	 */
+	public static function toInt(float $value, int $precision): int
+	{
+		return round($value, $precision, PHP_ROUND_HALF_DOWN) *
+			10 ** $precision;
+	}
 }

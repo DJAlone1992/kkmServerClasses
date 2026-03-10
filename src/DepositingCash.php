@@ -4,14 +4,14 @@ namespace Djalone\KkmServerClasses;
 
 use Djalone\KkmServerClasses\Services\Helper;
 /**
- * Команда инкассации (изъятия) наличных.
+ * Команда внесения наличных.
  */
-class PaymentCash extends Command
+class DepositingCash extends Command
 {
 	private int $amount = 0;
 
 	/**
-	 * Конструктор команды оплаты наличными.
+	 * Конструктор команды внесения наличных.
 	 *
 	 * @param string $cashierName Имя кассира.
 	 * @param string $cashierVatin ИНН кассира.
@@ -30,11 +30,10 @@ class PaymentCash extends Command
 			$kktNumber,
 			$idCommand
 		);
-		$this->command = 'PaymentCash';
+		$this->command = 'DepositingCash';
 	}
-
 	/**
-	 * Установить сумму оплаты наличными.
+	 * Установить сумму пополнения.
 	 *
 	 * Если передано целое число, то считается, что передано количество копеек.
 	 * Если передано число с плавающей точкой, то считается, что передано количество рублей и количество будет перечислено в копейках.
@@ -50,18 +49,11 @@ class PaymentCash extends Command
 		$this->amount = $amount;
 		return $this;
 	}
-	/**
-	 * Получить сумму оплаты наличными.
-	 *
-	 * @return int
-	 */
 	public function getAmount(): int
 	{
 		return $this->amount;
 	}
 	/**
-	 * Преобразовать в массив с ключом Amount.
-	 *
 	 * @return array<string, string>
 	 */
 	public function toArray(): array

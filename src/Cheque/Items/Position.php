@@ -89,7 +89,7 @@ class Position extends Item
 	public function setPrice(int|float $price): static
 	{
 		if (is_float($price)) {
-			$price = round($price, 2, PHP_ROUND_HALF_DOWN) * 100;
+			$price = Helper::toInt($price,2);
 		}
 		$this->price = $price;
 		return $this;
@@ -106,7 +106,7 @@ class Position extends Item
 	public function setQuantity(int|float $quantity): static
 	{
 		if (is_float($quantity)) {
-			$quantity = round($quantity, 3, PHP_ROUND_HALF_DOWN) * 1000;
+			$quantity = Helper::toInt($quantity,3);
 		}
 		$this->quantity = $quantity;
 		return $this;
