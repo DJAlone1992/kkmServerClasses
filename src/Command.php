@@ -6,6 +6,7 @@ namespace Djalone\KkmServerClasses;
  */
 abstract class Command
 {
+	protected array $errors;
 	/**
 	 * Название команды.
 	 * @var string $command
@@ -202,5 +203,40 @@ abstract class Command
 			array_merge($myArray, $childArray),
 			JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE
 		);
+	}
+	/**
+	 * Проверка валидности команды.
+	 *
+	 * @return bool True если команда валидна, иначе false.
+	 */
+	public function isValid(): bool
+	{
+		$error = false;
+		if (strlen($this->CashierName) < 3) {
+			$error = true;
+			$this->errors[] = 'Ф.И.О. кассира не может быть короче 3 символов';
+		}
+		if (strlen($this->CashierVatin) != 12) {
+			$error = true;
+			$this->errors[] = 'ИНН кассира должен состоять из 12 цифр';
+		}
+		if (strlen($this->KktNumber) < 10) {
+			$error = true;
+			$this->errors[] = 'Номер ККТ не может быть короче 10 символов';
+		}
+        if (strlen($this->IdCommand) != 40) {
+			$error = true;
+			$this->errors[] =
+				'Идентификатор команды не может быть короче 40 символов';
+		}
+
+		return !$error;
+	}
+	/**
+	 * @return array<string>
+	 */
+	public function getErrors(): array
+	{
+		return $this->errors;
 	}
 }

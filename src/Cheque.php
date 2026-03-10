@@ -77,10 +77,6 @@ class Cheque extends Command
 	 * @var string $AuthorizationCode
 	 */
 	private string $AuthorizationCode = '';
-	/**
-	 * @var array<string> $errors
-	 */
-	private array $errors = [];
 
 	/**
 	 * Конструктор чека.
@@ -500,33 +496,14 @@ class Cheque extends Command
 	}
 
 	/**
-	 * @return array<string>
-	 */
-	public function getErrors(): array
-	{
-		return $this->errors;
-	}
-	/**
 	 * Проверка валидности чека.
 	 *
 	 * @return bool True если чек валиден, иначе false.
 	 */
 	public function isValid(): bool
 	{
-		$error = false;
-		if (strlen($this->CashierName) < 3) {
-			$error = true;
-			$this->errors[] = 'Ф.И.О. кассира не может быть короче 3 символов';
-		}
-		if (strlen($this->CashierVatin) != 12) {
-			$error = true;
-			$this->errors[] = 'ИНН кассира должен состоять из 12 цифр';
-		}
-		if (strlen($this->KktNumber) < 10) {
-			$error = true;
-			$this->errors[] = 'Номер ККТ не может быть короче 10 символов';
-		}
-
+		$error = parent::isValid();
+		
 		if (strlen($this->clientAddress) < 3) {
 			$error = true;
 			$this->errors[] =
@@ -557,12 +534,6 @@ class Cheque extends Command
 		if (count($this->getItems()) == 0) {
 			$error = true;
 			$this->errors[] = 'Чек не содержит ни одной позиции';
-		}
-
-		if (strlen($this->IdCommand) != 40) {
-			$error = true;
-			$this->errors[] =
-				'Идентификатор команды не может быть короче 40 символов';
 		}
 
 		return !$error;
