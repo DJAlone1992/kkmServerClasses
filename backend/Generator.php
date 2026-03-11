@@ -7,9 +7,6 @@
  * создает соответствующие объекты команд и возвращает их в JSON-формате.
  */
 
-// Включаем отображение ошибок только в режиме разработки
-// В продакшене ошибки должны логироваться, а не отображаться
-ini_set('display_errors', 1);
 
 // Импортируем необходимые классы команд
 use Djalone\KkmServerClasses\CloseShift;
@@ -23,207 +20,8 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-// Импортируем классы Monolog для логирования
-use Monolog\Logger;
-use Monolog\Handler\StreamHandler;
-use Monolog\Processor\UidProcessor;
-
 // Подключаем автозагрузчик Composer
 require_once __DIR__ . '/../vendor/autoload.php';
-
-/**
- * Функция инициализации логгера
- *
- * @return Logger Объект логгера Monolog
- */
-function initializeLogger(): Logger
-{
-	// Создаем логгер с именем 'generator'
-	$logger = new Logger('generator');
-
-	// Добавляем уникальный идентификатор для каждого запроса
-	$logger->pushProcessor(new UidProcessor());
-
-	// Создаем директорию для логов, если она не существует
-	$logDirectory = __DIR__ . '/../logs';
-	if (!is_dir($logDirectory)) {
-		mkdir($logDirectory, 0755, true);
-	}
-
-	// Добавляем обработчик для записи в файл
-	$logFile = $logDirectory . '/generator.log';
-	$fileHandler = new StreamHandler($logFile, Logger::DEBUG);
-	$logger->pushHandler($fileHandler);
-
-	// Добавляем обработчик для записи ошибок в отдельный файл
-	$errorLogFile = $logDirectory . '/generator_errors.log';
-	$errorHandler = new StreamHandler($errorLogFile, Logger::WARNING);
-	$logger->pushHandler($errorHandler);
-
-	return $logger;
-}
-
-/**
- * Обработчик PHP ошибок
- *
- * Перехватывает все PHP ошибки и логирует их
- *
- * @param int $errno Код ошибки
- * @param string $errstr Сообщение об ошибке
- * @param string $errfile Файл, где произошла ошибка
- * @param int $errline Строка, где произошла ошибка
- * @param array $errcontext Контекст ошибки
- * @return bool Возвращает false для продолжения стандартной обработки
- */
-function errorHandler(
-	int $errno,
-	string $errstr,
-	string $errfile,
-	int $errline,
-	array $errcontext = []
-): bool {
-	global $logger;
-
-	// Определяем уровень логирования на основе типа ошибки
-	$logLevel = match ($errno) {
-		E_ERROR,
-		E_CORE_ERROR,
-		E_COMPILE_ERROR,
-		E_USER_ERROR
-			=> Logger::CRITICAL,
-		E_WARNING,
-		E_CORE_WARNING,
-		E_COMPILE_WARNING,
-		E_USER_WARNING
-			=> Logger::WARNING,
-		E_NOTICE,
-		E_USER_NOTICE,
-		E_STRICT,
-		E_DEPRECATED,
-		E_USER_DEPRECATED
-			=> Logger::NOTICE,
-		default => Logger::ERROR,
-	};
-
-	// Получаем backtrace для дополнительной информации
-	$backtrace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS);
-
-	// Логируем ошибку
-	$logger->log($logLevel, 'PHP ошибка', [
-		'error_code' => $errno,
-		'error_message' => $errstr,
-		'file' => $errfile,
-		'line' => $errline,
-		'context' => $errcontext,
-		'backtrace' => $backtrace,
-		'error_type' => match ($errno) {
-			E_ERROR => 'E_ERROR',
-			E_WARNING => 'E_WARNING',
-			E_PARSE => 'E_PARSE',
-			E_NOTICE => 'E_NOTICE',
-			E_CORE_ERROR => 'E_CORE_ERROR',
-			E_CORE_WARNING => 'E_CORE_WARNING',
-			E_COMPILE_ERROR => 'E_COMPILE_ERROR',
-			E_COMPILE_WARNING => 'E_COMPILE_WARNING',
-			E_USER_ERROR => 'E_USER_ERROR',
-			E_USER_WARNING => 'E_USER_WARNING',
-			E_USER_NOTICE => 'E_USER_NOTICE',
-			E_STRICT => 'E_STRICT',
-			E_RECOVERABLE_ERROR => 'E_RECOVERABLE_ERROR',
-			E_DEPRECATED => 'E_DEPRECATED',
-			E_USER_DEPRECATED => 'E_USER_DEPRECATED',
-			default => 'UNKNOWN_ERROR',
-		},
-	]);
-
-	// Возвращаем false, чтобы позволить стандартному обработчику PHP продолжить работу
-	return false;
-}
-
-/**
- * Обработчик непойманных исключений
- *
- * Перехватывает все непойманные исключения и логирует их
- *
- * @param Throwable $exception Исключение
- */
-function exceptionHandler(Throwable $exception): void
-{
-	global $logger;
-
-	// Логируем критическую ошибку
-	$logger->critical('Непойманное исключение', [
-		'exception_class' => get_class($exception),
-		'message' => $exception->getMessage(),
-		'file' => $exception->getFile(),
-		'line' => $exception->getLine(),
-		'trace' => $exception->getTraceAsString(),
-		'code' => $exception->getCode(),
-	]);
-
-	// Отправляем JSON ответ клиенту
-	$response = new JsonResponse(
-		[
-			'error' => true,
-			'errorCode' => 5,
-			'errorText' => 'Критическая ошибка сервера',
-		],
-		Response::HTTP_INTERNAL_SERVER_ERROR
-	);
-
-	// Проверяем, был ли уже отправлен заголовок
-	if (!headers_sent()) {
-		$request = Request::createFromGlobals();
-		$response->prepare($request);
-		$response->send();
-	}
-
-	exit(1);
-}
-
-/**
- * Обработчик завершения скрипта
- *
- * Перехватывает фатальные ошибки при завершении скрипта
- */
-function shutdownHandler(): void
-{
-	global $logger;
-
-	// Получаем информацию о последней ошибке
-	$error = error_get_last();
-
-	if ($error !== null) {
-		// Определяем, является ли ошибка фатальной
-		$fatalErrors = [
-			E_ERROR,
-			E_PARSE,
-			E_CORE_ERROR,
-			E_CORE_WARNING,
-			E_COMPILE_ERROR,
-			E_COMPILE_WARNING,
-		];
-
-		if (in_array($error['type'], $fatalErrors)) {
-			// Логируем фатальную ошибку
-			$logger->critical('Фатальная ошибка при завершении скрипта', [
-				'error_type' => $error['type'],
-				'message' => $error['message'],
-				'file' => $error['file'],
-				'line' => $error['line'],
-				'error_type_name' => match ($error['type']) {
-					E_ERROR => 'E_ERROR',
-					E_PARSE => 'E_PARSE',
-					E_CORE_ERROR => 'E_CORE_ERROR',
-					E_CORE_WARNING => 'E_CORE_WARNING',
-					E_COMPILE_ERROR => 'E_COMPILE_ERROR',
-					E_COMPILE_WARNING => 'E_COMPILE_WARNING',
-					default => 'UNKNOWN_FATAL_ERROR',
-				},
-			]);
-		}
-	}
-}
 
 /**
  * Функция валидации входных параметров запроса
@@ -282,14 +80,14 @@ function validateRequest(Request $request): array
  * @param Request $request Объект запроса для дополнительных параметров
  * @return object|null Объект команды или null, если команда не найдена
  */
-function createCommand(
-	string $commandType,
-	string $cashierName,
-	string $cashierVatin,
-	string $kktNumber,
-	string $idCommand,
-	Request $request
-) {
+function createCommand(Request $request)
+{
+	// Получаем параметры после валидации
+	$cashierName = $request->query->get('cashierName');
+	$cashierVatin = $request->query->get('cashierVatin');
+	$commandType = $request->query->get('command');
+	$kktNumber = $request->query->get('kktNumber');
+	$idCommand = $request->query->get('idCommand');
 	switch ($commandType) {
 		case 'openShift':
 			return new OpenShift(
@@ -395,22 +193,8 @@ try {
 		exit();
 	}
 
-	// Получаем параметры после валидации
-	$cashierName = $request->query->get('cashierName');
-	$cashierVatin = $request->query->get('cashierVatin');
-	$commandType = $request->query->get('command');
-	$kktNumber = $request->query->get('kktNumber');
-	$idCommand = $request->query->get('idCommand');
-
 	// Создаем объект команды
-	$command = createCommand(
-		$commandType,
-		$cashierName,
-		$cashierVatin,
-		$kktNumber,
-		$idCommand,
-		$request
-	);
+	$command = createCommand($request);
 
 	if ($command === null) {
 		$response = new JsonResponse(
