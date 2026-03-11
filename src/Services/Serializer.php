@@ -83,14 +83,10 @@ class Serializer
 			new DateTimeNormalizer(),
 			new BackedEnumNormalizer(),
 			new ArrayDenormalizer(),
-			new ObjectNormalizer(
-				propertyTypeExtractor: new PropertyInfoExtractor(
-					typeExtractors: [
+			new ObjectNormalizer(null, null, null, new PropertyInfoExtractor([], [
 						new PhpDocExtractor(),
 						new ReflectionExtractor(),
-					]
-				)
-			),
+					])),
 		];
 		return new SymfonySerializer(
 			$normalizers,

@@ -1,61 +1,62 @@
 <?php
 
 namespace Djalone\KkmServerClasses\Cheque\Enums;
+
 /**
  *  Признак предмета расчета. Тег ОФД 1212. Для ФФД.1.05 и выше обязательное поле
  */
-enum SignCalculationObject: int
+class SignCalculationObject
 {
 	// 1: "ТОВАР (наименование и иные сведения, описывающие товар)"
-	case GOODS = 1;
+	public const GOODS = 1;
 	// 2: "ПОДАКЦИЗНЫЙ ТОВАР (наименование и иные сведения, описывающие товар)"
-case EXCISABLE_GOODS = 2;
+	public const EXCISABLE_GOODS = 2;
 	// 3: "РАБОТА (наименование и иные сведения, описывающие работу)"
-    case WORK = 3;
+	public const WORK = 3;
 	// 4: "УСЛУГА (наименование и иные сведения, описывающие услугу)"
-	case SERVICE = 4;
+	public const SERVICE = 4;
 	// 5: "СТАВКА АЗАРТНОЙ ИГРЫ (при осуществлении деятельности по проведению азартных игр)"
-    case GAMBLING_BET = 5;
+	public const GAMBLING_BET = 5;
 	// 6: "ВЫИГРЫШ АЗАРТНОЙ ИГРЫ (при осуществлении деятельности по проведению азартных игр)"
-    case GAMBLING_WIN = 6;
+	public const GAMBLING_WIN = 6;
 	// 7: "ЛОТЕРЕЙНЫЙ БИЛЕТ (при осуществлении деятельности по проведению лотерей)"
-    case LOTTERY_TICKET = 7;
+	public const LOTTERY_TICKET = 7;
 	// 8: "ВЫИГРЫШ ЛОТЕРЕИ (при осуществлении деятельности по проведению лотерей)"
-    case LOTTERY_WIN = 8;
+	public const LOTTERY_WIN = 8;
 	// 9: "ПРЕДОСТАВЛЕНИЕ РИД (предоставлении прав на использование результатов интеллектуальной деятельности или средств индивидуализации)"
-    case PROVIDING_RID = 9;
+	public const PROVIDING_RID = 9;
 	// 10: "ПЛАТЕЖ (аванс, задаток, предоплата, кредит, взнос в счет оплаты, пени, штраф, вознаграждение, бонус и иной аналогичный предмет расчета)"
-	case PAYMENT = 10;
+	public const PAYMENT = 10;
 	// 11: "АГЕНТСКОЕ ВОЗНАГРАЖДЕНИЕ (вознаграждение (банковского)платежного агента/субагента, комиссионера, поверенного или иным агентом)"
-    case AGENT_COMMISSION = 11;
+	public const AGENT_COMMISSION = 11;
 	// 12: "СОСТАВНОЙ ПРЕДМЕТ РАСЧЕТА (предмет расчета, состоящем из предметов, каждому из которых может быть присвоено вышестоящее значение"
-    case COMPOSITE = 12;
+	public const COMPOSITE = 12;
 	// 13: "ИНОЙ ПРЕДМЕТ РАСЧЕТА (предмет расчета, не относящемуся к предметам расчета, которым может быть присвоено вышестоящее значение"
-    case OTHER = 13;
+	public const OTHER = 13;
 	// 14: "ИМУЩЕСТВЕННОЕ ПРАВО" (передача имущественных прав)
-    case PROPERTY_RIGHT = 14;
+	public const PROPERTY_RIGHT = 14;
 	// 15: "ВНЕРЕАЛИЗАЦИОННЫЙ ДОХОД"
-    case UNREALIZED_INCOME = 15;
+	public const UNREALIZED_INCOME = 15;
 	// 16: "СТРАХОВЫЕ ВЗНОСЫ" (суммы расходов, уменьшающих сумму налога (авансовых платежей) в соответствии с пунктом 3.1 статьи 346.21 Налогового кодекса Российской Федерации)
-    case INSURANCE_PREMIUM = 16;
+	public const INSURANCE_PREMIUM = 16;
 	// 17: "ТОРГОВЫЙ СБОР" (суммы уплаченного торгового сбора)
-    case TRADE_FEE = 17;
+	public const TRADE_FEE = 17;
 	// 18: "КУРОРТНЫЙ СБОР"
-    case RESORT_FEE = 18;
+	public const RESORT_FEE = 18;
 	// 19: "ЗАЛОГ"
-    case DEPOSIT = 19;
+	public const DEPOSIT = 19;
 	// 20: "РАСХОД" - суммы произведенных расходов в соответствии со статьей 346.16 Налогового кодекса Российской Федерации, уменьшающих доход
-    case EXPENSE = 20;
+	public const EXPENSE = 20;
 	// 21: "ВЗНОСЫ НА ОБЯЗАТЕЛЬНОЕ ПЕНСИОННОЕ СТРАХОВАНИЕ ИП" или "ВЗНОСЫ НА ОПС ИП"
-    case INSURANCE_PREMIUM_IP = 21;
+	public const INSURANCE_PREMIUM_IP = 21;
 	// 22: "ВЗНОСЫ НА ОБЯЗАТЕЛЬНОЕ ПЕНСИОННОЕ СТРАХОВАНИЕ" или "ВЗНОСЫ НА ОПС"
-    case INSURANCE_PREMIUM_OSP = 22;
+	public const INSURANCE_PREMIUM_OSP = 22;
 	// 23: "ВЗНОСЫ НА ОБЯЗАТЕЛЬНОЕ МЕДИЦИНСКОЕ СТРАХОВАНИЕ ИП" или "ВЗНОСЫ НА ОМС ИП"
-    case MEDICAL_INSURANCE_IP = 23;
+	public const MEDICAL_INSURANCE_IP = 23;
 	// 24: "ВЗНОСЫ НА ОБЯЗАТЕЛЬНОЕ МЕДИЦИНСКОЕ СТРАХОВАНИЕ" или "ВЗНОСЫ НА ОМС"
-    case MEDICAL_INSURANCE = 24;
+	public const MEDICAL_INSURANCE = 24;
 	// 25: "ВЗНОСЫ НА ОБЯЗАТЕЛЬНОЕ СОЦИАЛЬНОЕ СТРАХОВАНИЕ" или "ВЗНОСЫ НА ОСС"
-    case SOCIAL_INSURANCE = 25;
+	public const SOCIAL_INSURANCE = 25;
 	// 26: "ПЛАТЕЖ КАЗИНО" прием и выплата денежных средств при осуществлении казино и залами игровых автоматов расчетов с использованием обменных знаков игорного заведения
-    case CASINO_PAYMENT = 26;
+	public const CASINO_PAYMENT = 26;
 }

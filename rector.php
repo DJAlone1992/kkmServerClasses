@@ -18,22 +18,26 @@ use Rector\TypeDeclarationDocblocks\Rector\ClassMethod\DocblockReturnArrayFromDi
 return RectorConfig::configure()
     ->withPaths([
         __DIR__ . '/src',
+        __DIR__ . '/tests',
+        __DIR__ . '/frontend',
+        __DIR__ . '/backend',
     ])
     ->withRules([
         AddReturnArrayDocblockBasedOnArrayMapRector::class,
         AddReturnArrayDocblockFromDataProviderParamRector::class,
-AddReturnDocblockDataProviderRector::class,
-AddReturnDocblockForArrayDimAssignedObjectRector::class,
-AddReturnDocblockForJsonArrayRector::class,
-DocblockVarArrayFromGetterReturnRector::class,
-DocblockGetterReturnArrayFromPropertyDocblockVarRector::class,
-//DocblockNameImportingPostRector::class,
-DocblockReturnArrayFromDirectArrayInstanceRector::class,
-DocblockVarArrayFromPropertyDefaultsRector::class,
-DocblockVarFromParamDocblockInConstructorRector::class,
+        AddReturnDocblockDataProviderRector::class,
+        AddReturnDocblockForArrayDimAssignedObjectRector::class,
+        AddReturnDocblockForJsonArrayRector::class,
+        DocblockVarArrayFromGetterReturnRector::class,
+        DocblockGetterReturnArrayFromPropertyDocblockVarRector::class,
+        //DocblockNameImportingPostRector::class,
+        DocblockReturnArrayFromDirectArrayInstanceRector::class,
+        DocblockVarArrayFromPropertyDefaultsRector::class,
+        DocblockVarFromParamDocblockInConstructorRector::class,
     ])
+    ->withDowngradeSets(php74: true)
     // uncomment to reach your current PHP version
-    ->withPhpSets(php81:true)
+    ->withPhpSets(php74: true)
     ->withTypeCoverageLevel(0)
     ->withDeadCodeLevel(0)
     ->withCodeQualityLevel(0);

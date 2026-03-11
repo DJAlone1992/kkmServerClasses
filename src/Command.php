@@ -6,7 +6,26 @@ namespace Djalone\KkmServerClasses;
  */
 abstract class Command
 {
-	protected array $errors=[];
+	/**
+     * @var string
+     */
+    protected string $CashierName = '';
+    /**
+     * @var string
+     */
+    protected string $CashierVatin = '';
+    /**
+     * @var string
+     */
+    protected string $KktNumber = '';
+    /**
+     * @var string
+     */
+    protected string $IdCommand = '';
+    /**
+     * @var string[]
+     */
+    protected array $errors=[];
 	/**
 	 * Название команды.
 	 * @var string $command
@@ -35,26 +54,25 @@ abstract class Command
 	 * @param string $KktNumber    Номер ККТ (необязательно).
 	 * @param string $IdCommand    Уникальный идентификатор команды (необязательно).
 	 */
-	public function __construct(
-		/**
-		 * @var string $CashierName
-		 */
-		protected string $CashierName = '',
-		/**
-		 * @var string $CashierVatin
-		 */
-		protected string $CashierVatin = '',
-		/**
-		 * @var string $KktNumber
-		 */
-		protected string $KktNumber = '',
-		/**
-		 * @var string $IdCommand
-		 */
-		protected string $IdCommand = ''
-	) {
-
-	}
+	public function __construct(string $CashierName = '', string $CashierVatin = '', string $KktNumber = '', string $IdCommand = '')
+    {
+        /**
+         * @var string $CashierName
+         */
+        $this->CashierName = $CashierName;
+        /**
+         * @var string $CashierVatin
+         */
+        $this->CashierVatin = $CashierVatin;
+        /**
+         * @var string $KktNumber
+         */
+        $this->KktNumber = $KktNumber;
+        /**
+         * @var string $IdCommand
+         */
+        $this->IdCommand = $IdCommand;
+    }
 
 	/**
 	 * Установить имя кассира.
@@ -62,7 +80,7 @@ abstract class Command
 	 * @param string $CashierName
 	 * @return static
 	 */
-	public function setCashierName(string $CashierName): static
+	public function setCashierName(string $CashierName)
 	{
 		$this->CashierName = $CashierName;
 		return $this;
@@ -73,7 +91,7 @@ abstract class Command
 	 * @param string $CashierVatin
 	 * @return static
 	 */
-	public function setCashierVatin(string $CashierVatin): static
+	public function setCashierVatin(string $CashierVatin)
 	{
 		$this->CashierVatin = $CashierVatin;
 		return $this;
@@ -84,7 +102,7 @@ abstract class Command
 	 * @param string $KktNumber
 	 * @return static
 	 */
-	public function setKktNumber(string $KktNumber): static
+	public function setKktNumber(string $KktNumber)
 	{
 		$this->KktNumber = $KktNumber;
 		return $this;
@@ -95,7 +113,7 @@ abstract class Command
 	 * @param string $IdCommand
 	 * @return static
 	 */
-	public function setIdCommand(string $IdCommand): static
+	public function setIdCommand(string $IdCommand)
 	{
 		$this->IdCommand = $IdCommand;
 		return $this;
@@ -106,7 +124,7 @@ abstract class Command
 	 * @param int $timeout
 	 * @return static
 	 */
-	public function setTimeout(int $timeout): static
+	public function setTimeout(int $timeout)
 	{
 		$this->timeout = $timeout;
 		return $this;
@@ -117,7 +135,7 @@ abstract class Command
 	 * @param bool $notPrint
 	 * @return static
 	 */
-	public function setNotPrint(bool $notPrint): static
+	public function setNotPrint(bool $notPrint)
 	{
 		$this->notPrint = $notPrint;
 		return $this;

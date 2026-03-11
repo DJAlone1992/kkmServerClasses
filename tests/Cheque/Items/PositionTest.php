@@ -136,7 +136,7 @@ final class PositionTest extends TestCase
 
     public function test_fluent_interface_method_chaining(): void
     {
-        $position = new Position('Product', 1000)
+        $position = (new Position('Product', 1000))
             ->setDepartment(3)
             ->setTax(Tax::NDS_10)
             ->setSignMethodCalculation(SignMethodCalculation::FULL_PAYMENT)

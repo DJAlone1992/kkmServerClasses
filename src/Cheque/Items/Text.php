@@ -7,6 +7,10 @@ namespace Djalone\KkmServerClasses\Cheque\Items;
 class Text extends Item
 {
     /**
+     * @var string
+     */
+    private string $text = '';
+    /**
      * Размер шрифта (0–4).
      */
     private int $fontSize = 0;
@@ -20,8 +24,9 @@ class Text extends Item
      *
      * @param string $text Содержимое текста (по умолчанию пустая строка).
      */
-    public function __construct(private string $text='')
+    public function __construct(string $text='')
     {
+        $this->text = $text;
     }
     /**
      * Установить текст.
@@ -29,7 +34,7 @@ class Text extends Item
      * @param string $text
      * @return static
      */
-    public function setText(string $text): static
+    public function setText(string $text)
     {
         $this->text = $text;
         return $this;
@@ -40,7 +45,7 @@ class Text extends Item
      * @param int $fontSize
      * @return static
      */
-    public function setFont(int $fontSize): static
+    public function setFont(int $fontSize)
     {
         if ($fontSize < 0) {
             $fontSize = 0;
@@ -59,7 +64,7 @@ class Text extends Item
      * @param int $intensity
      * @return static
      */
-    public function setIntensity(int $intensity): static
+    public function setIntensity(int $intensity)
     {
 
         if ($intensity < 0) {

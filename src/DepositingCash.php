@@ -41,7 +41,7 @@ class DepositingCash extends Command
 	 * @param int|float $amount
 	 * @return static
 	 */
-	public function setAmount(int|float $amount)
+	public function setAmount($amount)
 	{
 		if (is_float($amount)) {
 			$amount = Helper::toInt($amount, 2);

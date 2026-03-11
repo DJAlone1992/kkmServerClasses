@@ -9,7 +9,10 @@ namespace Djalone\KkmServerClasses\Cheque\Items;
  */
 class Image extends Item
 {
-    private readonly string $image;
+    /**
+     * @readonly
+     */
+    private string $image;
 
     /**
      * Конструктор элемента изображения.

@@ -37,7 +37,7 @@ abstract class BarCode extends Item
      * @param string $type
      * @return static
      */
-    public function setType(string $type): static
+    public function setType(string $type)
     {
         $this->type = $type;
         return $this;
@@ -49,7 +49,7 @@ abstract class BarCode extends Item
      * @param string $body
      * @return static
      */
-    public function setBody(string $body): static
+    public function setBody(string $body)
     {
         $this->body = $body;
         return $this;

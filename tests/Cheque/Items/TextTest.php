@@ -29,7 +29,7 @@ final class TextTest extends TestCase
 
     public function test_font_bounds_are_enforced(): void
     {
-        $text = new Text('')->setFont(-5);
+        $text = (new Text(''))->setFont(-5);
         $this->assertSame(0, $text->getFontSize());
         $text->setFont(10);
         $this->assertSame(4, $text->getFontSize());
@@ -37,7 +37,7 @@ final class TextTest extends TestCase
 
     public function test_intensity_bounds_are_enforced(): void
     {
-        $text = new Text('')->setIntensity(-1);
+        $text = (new Text(''))->setIntensity(-1);
         $this->assertSame(0, $text->getIntensity());
         $text->setIntensity(100);
         $this->assertSame(15, $text->getIntensity());
@@ -45,7 +45,7 @@ final class TextTest extends TestCase
 
     public function test_to_array_structure(): void
     {
-        $text = new Text('abc')->setFont(2)->setIntensity(5);
+        $text = (new Text('abc'))->setFont(2)->setIntensity(5);
         $array = $text->toArray();
 
         $this->assertArrayHasKey('PrintText', $array);

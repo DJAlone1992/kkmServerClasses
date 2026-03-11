@@ -4,20 +4,20 @@ namespace Djalone\KkmServerClasses\Cheque\Enums;
 /**
  * Признак способа расчета. Тег ОФД 1214. Для ФФД.1.05 и выше обязательное поле
  */
-enum SignMethodCalculation: int
+class SignMethodCalculation
 {
 	// 1: "ПРЕДОПЛАТА 100% (Полная предварительная оплата до момента передачи предмета расчета)"
-	case FULL_PREPAYMENT = 1;
+	public const FULL_PREPAYMENT = 1;
 	// 2: "ПРЕДОПЛАТА (Частичная предварительная оплата до момента передачи предмета расчета)"
-	case PREPAYMENT = 2;
+	public const PREPAYMENT = 2;
 	// 3: "АВАНС"
-	case AVANCE = 3;
+	public const AVANCE = 3;
 	// 4: "ПОЛНЫЙ РАСЧЕТ (Полная оплата, в том числе с учетом аванса в момент передачи предмета расчета)"
-	case FULL_PAYMENT = 4;
+	public const FULL_PAYMENT = 4;
 	// 5: "ЧАСТИЧНЫЙ РАСЧЕТ И КРЕДИТ (Частичная оплата предмета расчета в момент его передачи с последующей оплатой в кредит )"
-	case PARTIAL_PAYMENT = 5;
+	public const PARTIAL_PAYMENT = 5;
 	// 6: "ПЕРЕДАЧА В КРЕДИТ (Передача предмета расчета без его оплаты в момент его передачи с последующей оплатой в кредит)"
-	case TO_CREDIT = 6;
+	public const TO_CREDIT = 6;
 	// 7: "ОПЛАТА КРЕДИТА (Оплата предмета расчета после его передачи с оплатой в кредит )"
-	case FROM_CREDIT = 7;
+	public const FROM_CREDIT = 7;
 }

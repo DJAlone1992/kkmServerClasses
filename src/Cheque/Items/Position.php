@@ -15,10 +15,26 @@ use Djalone\KkmServerClasses\Services\Helper;
 class Position extends Item
 {
 	/**
+	 * @var string
+	 * @readonly
+	 */
+	private string $name;
+	/**
+	 * @var int
+	 * @readonly
+	 */
+	private int $price;
+	/**
+	 * @var int
+	 * @readonly
+	 */
+	private int $quantity = 1000;
+	/**
 	 * Сумма позиции.
 	 * @var int
+	 * @readonly
 	 */
-	private readonly int $amount;
+	private int $amount;
 	/**
 	 * Номер отдела.
 	 * @var int
@@ -26,29 +42,29 @@ class Position extends Item
 	private int $department = 0;
 	/**
 	 * Ставка налога.
-	 * @var Tax
+	 * @var int
 	 */
-	private Tax $tax = Tax::NDS_NONE;
+	private int $tax = Tax::NDS_NONE;
 	/**
 	 * Метод расчета.
-	 * @var SignMethodCalculation
+	 * @var int
 	 */
-	private SignMethodCalculation $signMethodCalculation = SignMethodCalculation::FULL_PAYMENT;
+	private int $signMethodCalculation = SignMethodCalculation::FULL_PAYMENT;
 	/**
 	 * Объект расчета.
-	 * @var SignCalculationObject
+	 * @var int
 	 */
-	private SignCalculationObject $signCalculationObject = SignCalculationObject::SERVICE;
+	private int $signCalculationObject = SignCalculationObject::SERVICE;
 	/**
 	 * Единица измерения количества.
-	 * @var MeasureOfQuantity
+	 * @var int
 	 */
-	private MeasureOfQuantity $measureOfQuantity = MeasureOfQuantity::UNITS;
+	private int $measureOfQuantity = MeasureOfQuantity::UNITS;
 	/**
 	 * Тип оплаты.
-	 * @var PaymentTypes
+	 * @var int
 	 */
-	private PaymentTypes $paymentType = PaymentTypes::Cash;
+	private int $paymentType = PaymentTypes::Cash;
 
 	/**
 	 * Конструктор позиции.
@@ -58,23 +74,26 @@ class Position extends Item
 	 * @param int $quantity Количество в тысячных долях (по умолчанию 1000).
 	 */
 	public function __construct(
+		string $name,
+		int $price,
+		int $quantity = 1000
+	) {
 		/**
 		 * Наименование позиции
 		 *
 		 * @var string
 		 */
-		private readonly string $name,
+		$this->name = $name;
 		/**
 		 * Цена в копейках
 		 * @var int
 		 */
-		private readonly int $price,
+		$this->price = $price;
 		/**
 		 * Количество (в тысячных долях. 1 шт = 1000)
 		 * @var int
 		 */
-		private readonly int $quantity = 1000
-	) {
+		$this->quantity = $quantity;
 		$this->amount = $this->price * $this->quantity;
 	}
 	/**
@@ -86,7 +105,7 @@ class Position extends Item
 	 *
 	 * @return static
 	 */
-	public function setPrice(int|float $price): static
+	public function setPrice($price)
 	{
 		if (is_float($price)) {
 			$price = Helper::toInt($price,2);
@@ -103,7 +122,7 @@ class Position extends Item
 	 *
 	 * @return static
 	 */
-	public function setQuantity(int|float $quantity): static
+	public function setQuantity($quantity)
 	{
 		if (is_float($quantity)) {
 			$quantity = Helper::toInt($quantity,3);
@@ -114,10 +133,11 @@ class Position extends Item
 	/**
 	 * Установить тип оплаты для позиции.
 	 *
-	 * @param PaymentTypes $paymentType Тип оплаты.
+	 * @param mixed $paymentType Тип оплаты.
 	 * @return static
+	 * @param \Djalone\KkmServerClasses\Cheque\Enums\PaymentTypes::* $paymentType
 	 */
-	public function setPaymentType(PaymentTypes $paymentType): static
+	public function setPaymentType($paymentType)
 	{
 		$this->paymentType = $paymentType;
 		return $this;
@@ -126,9 +146,9 @@ class Position extends Item
 	/**
 	 * Получить тип оплаты позиции.
 	 *
-	 * @return PaymentTypes
+	 * @return int
 	 */
-	public function getPaymentType(): PaymentTypes
+	public function getPaymentType(): int
 	{
 		return $this->paymentType;
 	}
@@ -139,7 +159,7 @@ class Position extends Item
 	 * @param int $department Номер отдела.
 	 * @return static
 	 */
-	public function setDepartment(int $department): static
+	public function setDepartment(int $department)
 	{
 		$this->department = $department;
 		return $this;
@@ -147,10 +167,11 @@ class Position extends Item
 	/**
 	 * Установить ставку налога.
 	 *
-	 * @param Tax $tax Ставка налога.
+	 * @param mixed $tax Ставка налога.
 	 * @return static
+	 * @param \Djalone\KkmServerClasses\Cheque\Enums\Tax::* $tax
 	 */
-	public function setTax(Tax $tax): static
+	public function setTax($tax)
 	{
 		$this->tax = $tax;
 		return $this;
@@ -158,36 +179,39 @@ class Position extends Item
 	/**
 	 * Установить метод расчета (полная оплата, аванс и т.п.).
 	 *
-	 * @param SignMethodCalculation $signMethodCalculation Метод расчета.
+	 * @param mixed $signMethodCalculation Метод расчета.
 	 * @return static
+	 * @param \Djalone\KkmServerClasses\Cheque\Enums\SignMethodCalculation::* $signMethodCalculation
 	 */
 	public function setSignMethodCalculation(
-		SignMethodCalculation $signMethodCalculation
-	): static {
+		$signMethodCalculation
+	) {
 		$this->signMethodCalculation = $signMethodCalculation;
 		return $this;
 	}
 	/**
 	 * Установить объект расчета (товар, услуга и т.п.).
 	 *
-	 * @param SignCalculationObject $signCalculationObject Объект расчета.
+	 * @param mixed $signCalculationObject Объект расчета.
 	 * @return static
+	 * @param \Djalone\KkmServerClasses\Cheque\Enums\SignCalculationObject::* $signCalculationObject
 	 */
 	public function setSignCalculationObject(
-		SignCalculationObject $signCalculationObject
-	): static {
+		$signCalculationObject
+	) {
 		$this->signCalculationObject = $signCalculationObject;
 		return $this;
 	}
 	/**
 	 * Установить единицу измерения количества.
 	 *
-	 * @param MeasureOfQuantity $measureOfQuantity Единица измерения количества.
+	 * @param mixed $measureOfQuantity Единица измерения количества.
 	 * @return static
+	 * @param \Djalone\KkmServerClasses\Cheque\Enums\MeasureOfQuantity::* $measureOfQuantity
 	 */
 	public function setMeasureOfQuantity(
-		MeasureOfQuantity $measureOfQuantity
-	): static {
+		$measureOfQuantity
+	) {
 		$this->measureOfQuantity = $measureOfQuantity;
 		return $this;
 	}
@@ -210,30 +234,30 @@ class Position extends Item
 		return $this->department;
 	}
 	/**
-	 * @return Tax Ставка налога.
+	 * @return int Ставка налога.
 	 */
-	public function getTax(): Tax
+	public function getTax(): int
 	{
 		return $this->tax;
 	}
 	/**
-	 * @return SignMethodCalculation Метод расчета.
+	 * @return int Метод расчета.
 	 */
-	public function getSignMethodCalculation(): SignMethodCalculation
+	public function getSignMethodCalculation(): int
 	{
 		return $this->signMethodCalculation;
 	}
 	/**
-	 * @return SignCalculationObject Объект расчета.
+	 * @return int Объект расчета.
 	 */
-	public function getSignCalculationObject(): SignCalculationObject
+	public function getSignCalculationObject(): int
 	{
 		return $this->signCalculationObject;
 	}
 	/**
-	 * @return MeasureOfQuantity Единица измерения количества.
+	 * @return int Единица измерения количества.
 	 */
-	public function getMeasureOfQuantity(): MeasureOfQuantity
+	public function getMeasureOfQuantity(): int
 	{
 		return $this->measureOfQuantity;
 	}
@@ -272,11 +296,11 @@ class Position extends Item
 				'Price' => Helper::toFloat($this->price, 2),
 				'Amount' => Helper::toFloat($this->amount, 5),
 				'Department' => $this->department,
-				'Tax' => $this->tax->value,
-				'SignMethodCalculation' => $this->signMethodCalculation->value,
-				'SignCalculationObject' => $this->signCalculationObject->value,
-				'MeasureOfQuantity' => $this->measureOfQuantity->value,
-				'internalPaymentType' => $this->paymentType->value,
+				'Tax' => $this->tax,
+				'SignMethodCalculation' => $this->signMethodCalculation,
+				'SignCalculationObject' => $this->signCalculationObject,
+				'MeasureOfQuantity' => $this->measureOfQuantity,
+				'internalPaymentType' => $this->paymentType,
 			],
 		];
 	}

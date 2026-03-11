@@ -50,9 +50,9 @@ class Cheque extends Command
 	 */
 	private int $cashProvision = 0;
 	/**
-	 * @var ChequeType $chequeType Тип чека
+	 * @var int $chequeType Тип чека
 	 */
-	private ChequeType $chequeType = ChequeType::INCOME;
+	private int $chequeType = ChequeType::INCOME;
 	/**
 	 * @var bool $isFiscal
 	 */
@@ -159,9 +159,9 @@ class Cheque extends Command
 	/**
 	 * Возвращает enum типа чека.
 	 *
-	 * @return ChequeType
+	 * @return int
 	 */
-	public function getChequeType(): ChequeType
+	public function getChequeType(): int
 	{
 		return $this->chequeType;
 	}
@@ -223,7 +223,7 @@ class Cheque extends Command
 	 *
 	 * @return static Текущий объект для цепочки вызовов.
 	 */
-	public function addItem(Item $item): static
+	public function addItem(Item $item)
 	{
 		if ($item instanceof Position) {
 			$this->addPosition($item);
@@ -238,7 +238,7 @@ class Cheque extends Command
 	 * @param Text $text Текстовый элемент.
 	 * @return static Текущий объект для цепочки.
 	 */
-	public function addText(Text $text): static
+	public function addText(Text $text)
 	{
 		$this->texts[$this->itemsCounter] = $text;
 		$this->itemsCounter++;
@@ -251,7 +251,7 @@ class Cheque extends Command
 	 * @param Position $position Позиция товара.
 	 * @return static Текущий объект для цепочки.
 	 */
-	public function addPosition(Position $position): static
+	public function addPosition(Position $position)
 	{
 		$this->positions[$this->itemsCounter] = $position;
 		$this->itemsCounter++;
@@ -278,7 +278,7 @@ class Cheque extends Command
 	 * @param array<Position> $positions
 	 * @return static Текущий объект для цепочки.
 	 */
-	public function setPositions(array $positions): static
+	public function setPositions(array $positions)
 	{
 		if (count($positions) < 1) {
 			return $this;
@@ -294,7 +294,7 @@ class Cheque extends Command
 	 * @param array<Text> $texts
 	 * @return static Текущий объект для цепочки.
 	 */
-	public function setTexts(array $texts): static
+	public function setTexts(array $texts)
 	{
 		if (count($texts) < 1) {
 			return $this;
@@ -340,7 +340,7 @@ class Cheque extends Command
 	 * @param int $cash
 	 * @return static Текущий объект для цепочки.
 	 */
-	public function setCash(int $cash): static
+	public function setCash(int $cash)
 	{
 		$this->cash = $cash;
 		return $this;
@@ -351,7 +351,7 @@ class Cheque extends Command
 	 * @param int $electronicPayment
 	 * @return static Текущий объект для цепочки.
 	 */
-	public function setElectronicPayment(int $electronicPayment): static
+	public function setElectronicPayment(int $electronicPayment)
 	{
 		$this->electronicPayment = $electronicPayment;
 		return $this;
@@ -362,7 +362,7 @@ class Cheque extends Command
 	 * @param int $advancePayment
 	 * @return static Текущий объект для цепочки.
 	 */
-	public function setAdvancePayment(int $advancePayment): static
+	public function setAdvancePayment(int $advancePayment)
 	{
 		$this->advancePayment = $advancePayment;
 		return $this;
@@ -373,7 +373,7 @@ class Cheque extends Command
 	 * @param int $credit
 	 * @return static Текущий объект для цепочки.
 	 */
-	public function setCredit(int $credit): static
+	public function setCredit(int $credit)
 	{
 		$this->credit = $credit;
 		return $this;
@@ -384,7 +384,7 @@ class Cheque extends Command
 	 * @param int $cashProvision
 	 * @return static Текущий объект для цепочки.
 	 */
-	public function setCashProvision(int $cashProvision): static
+	public function setCashProvision(int $cashProvision)
 	{
 		$this->cashProvision = $cashProvision;
 		return $this;
@@ -392,10 +392,11 @@ class Cheque extends Command
 	/**
 	 * Установить тип чека.
 	 *
-	 * @param ChequeType $chequeType
+	 * @param mixed $chequeType
 	 * @return static Текущий объект для цепочки.
+	 * @param \Djalone\KkmServerClasses\Cheque\Enums\ChequeType::* $chequeType
 	 */
-	public function setChequeType(ChequeType $chequeType): static
+	public function setChequeType($chequeType)
 	{
 		$this->chequeType = $chequeType;
 		return $this;
@@ -406,7 +407,7 @@ class Cheque extends Command
 	 * @param bool $isFiscal
 	 * @return static Текущий объект для цепочки.
 	 */
-	public function setIsFiscal(bool $isFiscal): static
+	public function setIsFiscal(bool $isFiscal)
 	{
 		$this->isFiscal = $isFiscal;
 		return $this;
@@ -417,7 +418,7 @@ class Cheque extends Command
 	 * @param string $clientAddress
 	 * @return static Текущий объект для цепочки.
 	 */
-	public function setClientAddress(string $clientAddress): static
+	public function setClientAddress(string $clientAddress)
 	{
 		$this->clientAddress = $clientAddress;
 		return $this;
@@ -428,7 +429,7 @@ class Cheque extends Command
 	 * @param string $clientInfo
 	 * @return static Текущий объект для цепочки.
 	 */
-	public function setClientInfo(string $clientInfo): static
+	public function setClientInfo(string $clientInfo)
 	{
 		$this->clientInfo = $clientInfo;
 		return $this;
@@ -439,7 +440,7 @@ class Cheque extends Command
 	 * @param string $clientINN
 	 * @return static Текущий объект для цепочки.
 	 */
-	public function setClientINN(string $clientINN): static
+	public function setClientINN(string $clientINN)
 	{
 		$this->clientINN = $clientINN;
 		return $this;
@@ -450,7 +451,7 @@ class Cheque extends Command
 	 * @param string $RRNCode
 	 * @return static Текущий объект для цепочки.
 	 */
-	public function setRRNCode(string $RRNCode): static
+	public function setRRNCode(string $RRNCode)
 	{
 		$this->RRNCode = $RRNCode;
 		return $this;
@@ -461,7 +462,7 @@ class Cheque extends Command
 	 * @param string $AuthorizationCode
 	 * @return static Текущий объект для цепочки.
 	 */
-	public function setAuthorizationCode(string $AuthorizationCode): static
+	public function setAuthorizationCode(string $AuthorizationCode)
 	{
 		$this->AuthorizationCode = $AuthorizationCode;
 		return $this;
@@ -478,7 +479,7 @@ class Cheque extends Command
 			'RRNCode' => $this->RRNCode,
 			'AuthorizationCode' => $this->AuthorizationCode,
 			'IsFiscalCheck' => $this->isFiscal,
-			'TypeCheck' => $this->chequeType->value,
+			'TypeCheck' => $this->chequeType,
 			'CheckStrings' => array_map(
 				fn(Item $item) => $item->toArray(),
 				$this->getItems()
