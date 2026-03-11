@@ -18,30 +18,9 @@ require_once __DIR__ . '/../vendor/autoload.php';
 
 $twig = new Environment(new FilesystemLoader(__DIR__ . '/templates'));
 $request = Request::createFromGlobals();
+
 $callbackUrl = $request->request->get('callbackUrl', null);
-
 $chequeJson = $request->request->get('chequeJson', null);
-
-$callbackUrl = '../backend/testCallback.php';
-$cheque = new Cheque(
-	'Иванов И.И.',
-	'123456789012',
-	'',
-	CustomGUID::getCommandGuid()
-);
-$cheque->setClientAddress('+791234567')->setClientInfo('Иванов Иван Иванович');
-$cheque->addItem(
-	(new Position('Товар 1', 1000, 2000))->setPaymentType(
-		PaymentTypes::Electronic
-	) /*
-	->addItem(new Position('Товар 2', 2000, 1000))
-	->addItem(new Position('Товар 2', 2000, 1000))
-	->addItem(new Position('Товар 2', 2000, 1000))
-	->addItem(new Position('Товар 2', 2000, 1000))
-	->addItem(new Position('Товар 2', 2000, 1000))
-	->addItem(new Position('Товар 2', 2000, 1000))*/
-);
-$chequeJson = Serializer::serializeCheque($cheque);
 
 $error = false;
 $errors = [];

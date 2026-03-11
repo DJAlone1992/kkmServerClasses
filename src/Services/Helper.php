@@ -1,6 +1,9 @@
 <?php
 
 namespace Djalone\KkmServerClasses\Services;
+
+use Djalone\KkmServerClasses\Cheque;
+
 /**
  * Класс для вспомогательных функций.
  */
@@ -28,5 +31,29 @@ class Helper
 	{
 		return round($value, $precision, PHP_ROUND_HALF_DOWN) *
 			10 ** $precision;
+	}
+	/**
+	 * Генерирует HTML-форму для отправки данных чека на печать и автоматически отправляет её при загрузке страницы.
+	 * @param Cheque $cheque Объект чека, который нужно распечатать.
+	 * @param string $callbackUrl URL для обратного вызова после печати.
+	 * @return string HTML-код формы и скрипта для автоматической отправки.
+	 */
+	public static function echoForm(Cheque $cheque, string $callbackUrl): string
+	{
+		$chequeJSON = htmlspecialchars(Serializer::serializeCheque($cheque));
+		$callbackUrl = htmlspecialchars($callbackUrl);
+		$path = __DIR__ . '/../../frontend/printer.php';
+		$result = [
+			"<form id=\"printerRequestForm\" action=\"{$path}\" method=\"post\">",
+			"<input type=\"hidden\" name=\"callbackUrl\" value=\"{$callbackUrl}\">",
+			"<input type=\"hidden\" name=\"chequeJson\" value=\"{$chequeJSON}\">",
+			'</form>',
+			'<script>',
+			"document.addEventListener('DOMContentLoaded', function() {",
+			"    document.getElementById('printerRequestForm').submit();",
+			'});',
+			'</script>',
+		];
+		return implode($result);
 	}
 }

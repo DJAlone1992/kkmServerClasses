@@ -128,7 +128,7 @@ function createCommand(Request $request)
 				$kktNumber,
 				$idCommand
 			);
-			$command->setAmount((float) $amount);
+			$command->setAmount((int) $amount);
 			return $command;
 
 		case 'paymentCash':
@@ -144,7 +144,7 @@ function createCommand(Request $request)
 				$kktNumber,
 				$idCommand
 			);
-			$command->setAmount((float) $amount);
+			$command->setAmount((int) $amount);
 			return $command;
 
 		case 'KKTStatus':
