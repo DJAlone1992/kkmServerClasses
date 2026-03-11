@@ -54,8 +54,8 @@ class Position extends Item
 	 * Конструктор позиции.
 	 *
 	 * @param string $name Название позиции.
-	 * @param int $price Цена в минимальных единицах.
-	 * @param int $quantity Количество (по умолчанию 1).
+	 * @param int $price Цена в копейках.
+	 * @param int $quantity Количество в тысячных долях (по умолчанию 1000).
 	 */
 	public function __construct(
 		/**

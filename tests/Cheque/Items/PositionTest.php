@@ -34,8 +34,8 @@ final class PositionTest extends TestCase
     {
         $position = new Position('Product', 5000);
 
-        $this->assertSame(1, $position->getQuantity());
-        $this->assertSame(5000, $position->getAmount());
+        $this->assertSame(1000, $position->getQuantity());
+        $this->assertSame(5000000, $position->getAmount());
     }
 
     public function test_default_department_is_zero(): void
