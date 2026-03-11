@@ -7,7 +7,6 @@
  * создает соответствующие объекты команд и возвращает их в JSON-формате.
  */
 
-
 // Импортируем необходимые классы команд
 use Djalone\KkmServerClasses\CloseShift;
 use Djalone\KkmServerClasses\DepositingCash;
@@ -19,6 +18,7 @@ use Djalone\KkmServerClasses\DeviceList;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Djalone\KkmServerClasses\Services\Logger;
 
 // Подключаем автозагрузчик Composer
 require_once __DIR__ . '/../vendor/autoload.php';
@@ -57,9 +57,11 @@ function validateRequest(Request $request): array
 	if (empty($command) || !is_string($command)) {
 		$errors[] = 'Не указана команда или некорректный формат';
 	}
-
-	if (empty($kktNumber) || !is_string($kktNumber)) {
-		$errors[] = 'Не указан номер ККТ или некорректный формат';
+	if ($command !== 'DeviceList') {
+		// Для команды DeviceList остальные параметры не обязательны
+		if (empty($kktNumber) || !is_string($kktNumber)) {
+			$errors[] = 'Не указан номер ККТ или некорректный формат';
+		}
 	}
 
 	if (empty($idCommand) || !is_string($idCommand)) {
@@ -164,6 +166,14 @@ function createCommand(Request $request)
 // Создаем объект запроса из глобальных переменных
 $request = Request::createFromGlobals();
 
+// Логируем входящий запрос
+Logger::getInstance()->info('Incoming request', [
+	'method' => $request->getMethod(),
+	'path' => $request->getPathInfo(),
+	'query' => $request->query->all(),
+	'isAjax' => $request->isXmlHttpRequest(),
+]);
+
 // Проверяем, что запрос является AJAX
 if (!$request->isXmlHttpRequest()) {
 	$response = new Response(
@@ -180,6 +190,10 @@ try {
 	$errors = validateRequest($request);
 
 	if (!empty($errors)) {
+		Logger::getInstance()->warning('Request validation failed', [
+			'errors' => $errors,
+			'query' => $request->query->all(),
+		]);
 		$response = new JsonResponse(
 			[
 				'error' => true,
@@ -197,6 +211,10 @@ try {
 	$command = createCommand($request);
 
 	if ($command === null) {
+		Logger::getInstance()->warning('Unknown command requested', [
+			'command' => $request->query->get('command'),
+			'query' => $request->query->all(),
+		]);
 		$response = new JsonResponse(
 			[
 				'error' => true,
@@ -210,6 +228,12 @@ try {
 		exit();
 	}
 
+	// Логируем успешное создание команды
+	Logger::getInstance()->info('Command created successfully', [
+		'commandType' => get_class($command),
+		'idCommand' => $request->query->get('idCommand'),
+	]);
+
 	// Возвращаем успешный ответ с данными команды
 	$response = new JsonResponse(
 		['error' => false, 'command' => $command->toRealArray()],
@@ -219,6 +243,10 @@ try {
 	$response->send();
 } catch (InvalidArgumentException $e) {
 	// Обработка ошибок валидации параметров команд
+	Logger::getInstance()->error('Invalid argument exception', [
+		'message' => $e->getMessage(),
+		'query' => $request->query->all(),
+	]);
 	$response = new JsonResponse(
 		[
 			'error' => true,
@@ -231,6 +259,11 @@ try {
 	$response->send();
 } catch (Exception $e) {
 	// Обработка общих исключений
+	Logger::getInstance()->error('Unexpected exception', [
+		'message' => $e->getMessage(),
+		'trace' => $e->getTraceAsString(),
+		'query' => $request->query->all(),
+	]);
 	$response = new JsonResponse(
 		[
 			'error' => true,

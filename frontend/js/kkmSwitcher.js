@@ -47,17 +47,10 @@ function getActiveKKt() {
 				// Показываем модальное окно с сообщением о загрузке списка ККТ
 				showOperationModal('Загружаем список ККТ', 'Требуется указать ККТ');
 				// Создаем параметры для запроса списка устройств
-				let params = new URLSearchParams();
-				params.append('command', COMMAND_DEVICE_LIST);
-				params.append('cashierName', ' ');
-				params.append('cashierVatin', ' ');
-				params.append('kktNumber', ' ');
-				params.append('idCommand', guid());
+
+				let params = getUrlParams(COMMAND_DEVICE_LIST);
 				// Отправляем запрос на получение списка устройств
-				myFetch(
-					'../backend/Generator.php?' + params.toString(),
-					showKktSwitcher,
-				);
+				myFetch(`../backend/Generator.php?${params}`, showKktSwitcher);
 			} else {
 				// Если номер сохранен, применяем его
 				applyKktNumber(response);

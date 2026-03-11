@@ -4,3 +4,5 @@
 .prettierrc
 package-lock.json
 package.json
+.phpunit.result.cache
+/var/
