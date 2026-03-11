@@ -1,0 +1,345 @@
+{% extends "base.html.twig" %}
+{% block javascript %}
+	<script type="text/javascript" src="js/printer.js"></script>
+{% endblock javascript %}
+{% block body %}
+	<div class="card w-100 m-5">
+		<div class="card-header"><h2>Печать чека</h2></div>
+		<div class="card-body">
+			<div class="row mb-3">
+				<div class="col-8">
+					<table class="table h-100 table-bordered table-sm table-responsive">
+						<thead>
+							<tr>
+								<th class="text-center">Наименование</th>
+								<th class="text-center">Цена</th>
+								<th class="text-center">Кол-во</th>
+								<th class="text-center">Сумма</th>
+								<th class="text-center">Признак<br />расчета</th>
+							</tr>
+						</thead>
+						<tbody class="table-striped table-hover">
+							{% for item in cheque.CheckStrings %}
+								<tr>
+									<td>{{ item.Register.Name }}</td>
+									<td class="text-center formatValue">
+										{{ item.Register.Price }}
+									</td>
+									<td class="text-center formatValue">
+										{{ item.Register.Quantity }}
+									</td>
+									<td class="text-center formatValue">
+										{{ item.Register.Amount }}
+									</td>
+									<td class="text-center">
+										{{ item.Register.internalPaymentType|paymentType }}
+									</td>
+								</tr>
+							{% endfor %}
+						</tbody>
+						<tfoot>
+							<tr>
+								<td colspan="3" class="text-end"><strong>Итого:</strong></td>
+								<td class="text-center">
+									<strong class="formatValue">
+										{{ cheque.Cash + cheque.ElectronicPayment }}
+									</strong>
+								</td>
+								<td></td>
+							</tr>
+						</tfoot>
+					</table>
+				</div>
+				<div class="col-4">
+					<div class="mb-1 input-group">
+						<span class="input-group-text text-end">
+							&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Итого наличными:
+						</span>
+						<input id="totalCash"
+							type="number"
+							step="0.01"
+							class="form-control formatValue"
+							value="{{ cheque.Cash }}"
+							disabled />
+						<span class="input-group-text">
+							<svg xmlns="http://www.w3.org/2000/svg"
+								width="1em"
+								height="1em"
+								viewbox="0 0 16 16">
+								<g fill="currentColor">
+									<path d="M1 3a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1zm7 8a2 2 0 1 0 0-4a2 2 0 0 0 0 4" />
+									<path d="M0 5a1 1 0 0 1 1-1h14a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1H1a1 1 0 0 1-1-1zm3 0a2 2 0 0 1-2 2v4a2 2 0 0 1 2 2h10a2 2 0 0 1 2-2V7a2 2 0 0 1-2-2z" />
+								</g>
+							</svg>
+						</span>
+					</div>
+					<div class="mb-5 input-group">
+						<span class="input-group-text text-end">
+							&nbsp;Итого безналичными:
+						</span>
+						<input id="totalElectron"
+							type="number"
+							step="0.01"
+							class="form-control formatValue"
+							value="{{ cheque.ElectronicPayment }}"
+							disabled />
+						<span class="input-group-text">
+							<svg xmlns="http://www.w3.org/2000/svg"
+								width="1em"
+								height="1em"
+								viewbox="0 0 512 512">
+								<rect width="416"
+									height="320"
+									x="48"
+									y="96"
+									fill="none"
+									stroke="currentColor"
+									stroke-linecap="round"
+									stroke-linejoin="round"
+									stroke-width="32"
+									rx="56"
+									ry="56" />
+								<path fill="none"
+									stroke="currentColor"
+									stroke-linejoin="round"
+									stroke-width="60"
+									d="M48 192h416M128 300h48v20h-48z" />
+							</svg>
+						</span>
+					</div>
+					<div class="mb-1 input-group">
+						<span class="input-group-text text-end">Получено наличными:</span>
+
+						<input id="totalReceivedCash"
+							type="number"
+							step="0.01"
+							class="form-control formatValue"
+							value="{{ cheque.Cash }}" />
+						<span class="input-group-text">
+							<svg xmlns="http://www.w3.org/2000/svg"
+								width="1em"
+								height="1em"
+								viewbox="0 0 24 24">
+								<g fill="none"
+									stroke="currentColor"
+									stroke-linejoin="round"
+									stroke-miterlimit="10">
+									<path stroke-linecap="round"
+										d="M16.5 13.5h-6l-7-1m8.5-8h5L18 6l-1 1.5L18 9l-1 1.5l.5 1.5l-1 1.5m-13-6l3.5-1l1.5-3l2.4-1.2m3.6 14.2h-2l-.5 1l.5 1h2l.5 1l-.5 1h-2m1-4v-1m0 6v-1" />
+									<path d="m16 13.5l3.5 3v5l-6 2l-6-2v-5l3-3" />
+									<path stroke-linecap="round"
+										d="m10 .5l2 4h3l2-4zm-6.5 6h-3v7h3z" />
+								</g>
+							</svg>
+						</span>
+					</div>
+					<div class="mb-5 input-group">
+						<span class="input-group-text text-end">
+							&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Сдача:
+						</span>
+
+						<input id="totalBackCash"
+							type="number"
+							step="0.01"
+							class="form-control formatValue"
+							value="0"
+							disabled />
+						<span class="input-group-text">
+							<svg xmlns="http://www.w3.org/2000/svg"
+								width="1em"
+								height="1em"
+								viewbox="0 0 24 24">
+								<g fill="none"
+									stroke="currentColor"
+									stroke-linecap="round"
+									stroke-linejoin="round"
+									stroke-miterlimit="10">
+									<path d="M3.5 6L7 2.5M3.5 9L7 12.5m0 0H3.5v-10h18v10h-8m8-6.5L18 2.5M21.5 9L18 12.5m-15 11l5.5-3h7l5.5-3l-.5-1.5l-5 1l-6.5-.5l2-2.5l-.5-1.5l-5 3l-2.5 3l-2.5 1" />
+									<path d="M13.5 5.5h-2l-.5 1l.5 1h2l.5 1l-.5 1h-2m1-4v-1m0 6v-1" />
+								</g>
+							</svg>
+						</span>
+					</div>
+					<div class="mb-1 input-group">
+						<span class="input-group-text text-end">
+							&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Имя клиента:
+						</span>
+
+						<input id="customerName"
+							type="text"
+							class="form-control"
+							value="{{ cheque.ClientInfo }}"
+							disabled />
+						<span class="input-group-text">
+							<svg xmlns="http://www.w3.org/2000/svg"
+								width="1em"
+								height="1em"
+								viewbox="0 0 24 24">
+								<path fill="currentColor"
+									d="m14.95 13.889l-1.061 1.061l-5.552-5.553l1.06-1.06z" />
+								<path fill="currentColor"
+									d="M12.574 4a.75.75 0 0 1 .53.22l6.723 6.724a2.315 2.315 0 0 1 0 3.264l-.532-.528l.531.53l-5.61 5.611a2.31 2.31 0 0 1-3.276.001l-6.72-6.716a.75.75 0 0 1-.22-.53V4.75A.75.75 0 0 1 4.75 4zM5.5 5.5v6.764l6.501 6.497a.82.82 0 0 0 .889.178a.8.8 0 0 0 .264-.178l5.61-5.61a.816.816 0 0 0-.001-1.149l-6.5-6.502z" />
+							</svg>
+						</span>
+					</div>
+					<div class="mb-1 input-group">
+						<span class="input-group-text text-end">Контакт клиента:</span>
+
+						<input id="customerContact"
+							type="text"
+							class="form-control"
+							value="{{ cheque.ClientAddress }}"
+							disabled />
+						<span class="input-group-text">
+							<svg xmlns="http://www.w3.org/2000/svg"
+								width="1em"
+								height="1em"
+								viewbox="0 0 16 16">
+								<g fill="currentColor">
+									<path d="M11 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1zM5 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2z" />
+									<path d="M8 14a1 1 0 1 0 0-2a1 1 0 0 0 0 2" />
+								</g>
+							</svg>
+						</span>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="card-footer">
+			<div class="row">
+				<div class="col-8">
+					<div class="row">
+						<div class="col-6">
+							<div class="row g-3 align-items-center mb-1">
+								<div class="col-3 text-end">
+									<label class="form-label" for="cashierName">Кассир:</label>
+								</div>
+								<div class="col-9">
+									<input id="cashierName"
+										type="text"
+										class="form-control"
+										value="{{ cheque.CashierName }}"
+										disabled />
+								</div>
+							</div>
+							<div class="row g-3 align-items-center mb-1">
+								<div class="col-3 text-end">
+									<label class="form-label" for="cashierVatin">
+										Номер ККТ:
+									</label>
+								</div>
+								<div class="col-9">
+									<div class="form-control">
+										<a href="#kktNumber" id="kktNumber">
+											<span class="spinner-grow spinner-grow-sm"
+												role="status"></span>
+										</a>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="col-6">
+							<div class="row g-3 align-items-center mb-1">
+								<div class="col-3 text-end">
+									<label class="form-label" for="cashierVatin">
+										ИНН кассира:
+									</label>
+								</div>
+								<div class="col-9">
+									<input id="cashierVatin"
+										type="text"
+										class="form-control"
+										value="{{ cheque.CashierVatin }}"
+										disabled />
+								</div>
+							</div>
+							<div class="row g-3 align-items-center mb-1">
+								<div class="col-3 text-end">
+									<label class="form-label" for="IdCommand">ID операции:</label>
+								</div>
+								<div class="col-9">
+									<input id="IdCommand"
+										type="text"
+										class="form-control"
+										value="{{ cheque.IdCommand }}"
+										disabled />
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-4 btn-group">
+					<button type="button" id="cancelPrint" class="btn btn-danger">
+						<svg class="h-100 w-auto"
+							xmlns="http://www.w3.org/2000/svg"
+							width="1em"
+							height="1em"
+							viewbox="0 0 24 24">
+							<path fill="currentColor"
+								d="M19.833 21.26L17 18.427V20H7v-4H3.577v-5.384q0-.85.577-1.425t1.423-.576h1.612L2.74 4.168l.713-.713l17.092 17.092zM8 19h8v-1.573l-2.965-2.965H8zm10.812-3l-1-1h1.611v-4.384q0-.425-.287-.713t-.713-.288h-5.996l-1-1h6.996q.85 0 1.425.576t.575 1.424V16zM4.577 15H7v-1.538h5.035L8.189 9.616H5.577q-.425 0-.712.287t-.288.713zM16 8.616v-3H8.427l-1-1H17v4zm1.616 3.5q.425 0 .712-.288t.288-.712t-.288-.713t-.712-.288t-.713.288t-.287.713t.287.712t.713.288m-12.039-2.5h2.612h-3.612zm12.846 0h1h-6.996z" />
+						</svg>Отменить печать
+					</button>
+					<button type="button" id="printCheque" class="btn btn-primary">
+						<svg class="h-100 w-auto"
+							xmlns="http://www.w3.org/2000/svg"
+							width="1em"
+							height="1em"
+							viewbox="0 0 24 24">
+							<path fill="currentColor"
+								d="M16 8.616v-3H8v3H7v-4h10v4zm-11.423 1h14.846zm13.038 2.5q.425 0 .713-.288t.287-.712t-.287-.713t-.713-.288t-.712.288t-.288.713t.288.712t.713.288M16 19v-4.538H8V19zm1 1H7v-4H3.577V8.616h16.846V16H17zm2.423-5V9.616H4.577V15H7v-1.538h10V15z" />
+						</svg>Печатать чек
+					</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- Modal -->
+	<div class="modal fade modal-lg"
+		id="chequePrePrint"
+		data-bs-backdrop="true"
+		data-bs-keyboard="true"
+		tabindex="-1"
+		aria-labelledby="chequePrePrintLabel"
+		aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h1 class="modal-title fs-5" id="chequePrePrintLabel">
+						Подготовка к печати чека
+					</h1>
+					<button type="button"
+						class="btn-close"
+						data-bs-dismiss="modal"
+						aria-label="Закрыть"></button>
+				</div>
+				<div class="modal-body">
+					<h2>Внимание!</h2>
+					<p>Вы собираетесь провести фискальный чек на суммы</p>
+					<ul>
+						<li id="modalCashSum"><strong>100</strong> наличными</li>
+						<li id="modalElectronicSum"><strong>100</strong> безналичными</li>
+					</ul>
+					<p>
+						Если вы сомневаетесь, то это последнее сообщение, когда можно
+						отменить операцию.
+					</p> <p>
+						Нажав кнопку "Продолжить печать чека" отменить операцию будет
+						невозможно
+					</p>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-danger" data-bs-dismiss="modal">
+						Закрыть
+					</button>
+					<button type="button"
+						id="runCheque"
+						class="btn btn-primary"
+						data-callback-url="{{ callbackUrl }}"
+						data-prepared-json="{{ chequeJson }}">
+						Продолжить печать чека
+					</button>
+				</div>
+			</div>
+		</div>
+	</div>
+{% endblock body %}

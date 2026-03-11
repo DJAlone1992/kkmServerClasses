@@ -1,0 +1,19 @@
+{% extends "base.html.twig" %}
+
+{% block body %}
+
+    <div class="card w-100 m-5">
+			<div class="card-header">
+				<h2>Ошибка подготовки к печати чека<h2>
+            </div>
+			<div class="card-body">
+            <p><strong>Запрос к системе печати некорректен</strong></p>
+            <ul class="list-group list-group-flush">
+            {% for error in errors %}
+            <li class="list-group-item list-group-item-danger">{{ error }}</li>
+            {% endfor %}
+
+            </ul>
+            </div>
+    </div>
+{% endblock %}

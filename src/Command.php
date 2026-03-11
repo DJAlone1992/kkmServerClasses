@@ -6,7 +6,7 @@ namespace Djalone\KkmServerClasses;
  */
 abstract class Command
 {
-	protected array $errors;
+	protected array $errors=[];
 	/**
 	 * Название команды.
 	 * @var string $command
@@ -52,7 +52,9 @@ abstract class Command
 		 * @var string $IdCommand
 		 */
 		protected string $IdCommand = ''
-	) {}
+	) {
+
+	}
 
 	/**
 	 * Установить имя кассира.
@@ -220,10 +222,10 @@ abstract class Command
 			$error = true;
 			$this->errors[] = 'ИНН кассира должен состоять из 12 цифр';
 		}
-		if (strlen($this->KktNumber) < 10) {
+	/*	if (strlen($this->KktNumber) < 10) {
 			$error = true;
 			$this->errors[] = 'Номер ККТ не может быть короче 10 символов';
-		}
+		}*/
         if (strlen($this->IdCommand) != 40) {
 			$error = true;
 			$this->errors[] =

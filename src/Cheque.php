@@ -82,17 +82,17 @@ class Cheque extends Command
 	 * Конструктор чека.
 	 *
 	 * @param string $cashierName  Имя кассира (необязательно).
-	 * @param string $cashierTin   ИНН кассира (необязательно).
+	 * @param string $cashierVatin   ИНН кассира (необязательно).
 	 * @param string $kktNumber    Номер ККТ (необязательно).
 	 * @param string $idCommand    Идентификатор команды (необязательно).
 	 */
 	public function __construct(
 		string $cashierName = '',
-		string $cashierTin = '',
+		string $cashierVatin = '',
 		string $kktNumber = '',
 		string $idCommand = ''
 	) {
-		parent::__construct($cashierName, $cashierTin, $kktNumber, $idCommand);
+		parent::__construct($cashierName, $cashierVatin, $kktNumber, $idCommand);
 		$this->command = 'RegisterCheck';
 	}
 
@@ -502,8 +502,8 @@ class Cheque extends Command
 	 */
 	public function isValid(): bool
 	{
-		$error = parent::isValid();
-		
+		$error = !parent::isValid();
+
 		if (strlen($this->clientAddress) < 3) {
 			$error = true;
 			$this->errors[] =
