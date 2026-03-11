@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="ru">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Функции взаимодействия с ФР</title>
+		<script>var KkmServerAddIn = {};</script>
+		<link rel="stylesheet"
+			href="../../vendor/twbs/bootstrap/dist/css/bootstrap.min.css" /> {% block stylesheets %}{% endblock stylesheets %}
+	</head>
+	<body class="d-flex align-items-center justify-content-center py-4">
+		{% block body %}{% endblock body %}
+
+		<!-- Modal -->
+		<div class="modal fade modal-lg"
+			id="operationStatus"
+			data-bs-backdrop="static"
+			data-bs-keyboard="false"
+			tabindex="-1"
+			aria-labelledby="operationStatusLabel"
+			aria-hidden="true">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h1 class="modal-title fs-5" id="operationStatusLabel">
+							Обрабатываем запрос
+						</h1>
+						<button type="button"
+							class="btn-close operationStatusClose"
+							disabled
+							data-bs-dismiss="modal"
+							aria-label="Закрыть"></button>
+					</div>
+					<div class="modal-body">
+						<div class="d-flex align-items-center" id="operationStatusSpinner">
+							<span role="status" class="mr-3">
+								Запускаем команду
+								<strong id="operationStatusName"></strong>
+							</span>
+							<div class="spinner-border ms-auto" aria-hidden="true"></div>
+						</div>
+						<div id="operationStatusPlaceholder"></div>
+					</div>
+					<div class="modal-footer">
+						<button type="button"
+							class="btn btn-secondary operationStatusClose"
+							disabled
+							data-bs-dismiss="modal">
+							Закрыть
+						</button>
+					</div>
+				</div>
+			</div>
+		</div>
+		<script type="text/javascript"
+			src="../../vendor/twbs/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+		<script type="text/javascript" src="js/baseFunctions.js"></script>
+		<script type="text/javascript" src="js/operationsModal.js"></script>
+		<script type="text/javascript" src="js/kkmSwitcher.js"></script>
+		<script type="text/javascript" src="js/moment-with-locales.js"></script>
+		{% block javascript %}{% endblock javascript %}
+	</body>
+</html>

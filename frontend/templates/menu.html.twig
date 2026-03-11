@@ -1,0 +1,161 @@
+{% extends "base.html.twig" %}
+{% block javascript %}
+	<script type="text/javascript" src="js/kkmServer.js"></script>
+	<script type="text/javascript" src="js/simpleOperations.js"></script>
+	<script type="text/javascript" src="js/inOutCash.js"></script>
+{% endblock javascript %}
+{% block body %}
+	<div class="card w-100 m-5">
+		<div class="card-header"><h2>Функции работы с ФР</h2></div>
+		<div class="card-body">
+			<div class="row">
+				<div class="col-6">
+					<div class="card">
+						<div class="card-body">
+							<h3 class="card-title">Смена</h3>
+							<h5 class="card-subtitle mb-2 text-body-secondary">
+								Операции по работе со сменой в ФР
+							</h5>
+							<ul class="list-group">
+								<li class="list-group-item">
+									<a href="#" class="link-primary" id="openShift">
+										Открыть смену
+									</a>
+								</li>
+								<li class="list-group-item">
+									<a href="#" class="stretched-link" id="closeShift">
+										Закрыть смену (Z-отчет)
+									</a>
+								</li>
+							</ul>
+						</div>
+					</div>
+					<div class="card mt-5">
+						<div class="card-body">
+							<h3 class="card-title">Отчеты</h3>
+							<h5 class="card-subtitle mb-2 text-body-secondary">
+								Снятие отчетов по смене
+							</h5>
+							<ul class="list-group">
+								<li class="list-group-item">
+									<a href="#" class="link-primary" id="XReport">X-отчет</a>
+								</li>
+								<li class="list-group-item">
+									<a href="#" class="stretched-link" id="KKTStatus">
+										Краткое состояние ККТ
+									</a>
+								</li>
+								<li class="list-group-item">
+									<a href="#" class="stretched-link" id="KKTFullStatus">
+										Полное состояние ККТ
+									</a>
+								</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+				<div class="col-6">
+					<div class="card">
+						<div class="card-body">
+							<h3 class="card-title">Наличные в кассе</h3>
+							<h5 class="card-subtitle mb-2 text-body-secondary">
+								Внесение или изъятие наличных из кассы
+							</h5>
+							<ul class="list-group">
+								<li class="list-group-item">
+									<a href="#"
+										data-bs-toggle="modal"
+										data-bs-target="#inOutCashModal"
+										data-bs-direction="in"
+										class="link-primary">
+										Внести наличные в кассу
+									</a>
+								</li>
+								<li class="list-group-item">
+									<a href="#"
+										data-bs-toggle="modal"
+										data-bs-target="#inOutCashModal"
+										data-bs-direction="out"
+										class="stretched-link">
+										Изъять наличные из кассы
+									</a>
+								</li>
+							</ul>
+						</div>
+					</div>
+
+					<div class="card mt-5">
+						<div class="card-body">
+							<h3 class="card-title">Информация</h3>
+							<h5 class="card-subtitle mb-2 text-body-secondary">
+								Данные текущего пользователя и ККТ
+							</h5>
+							<ul class="list-group">
+								<li class="list-group-item">
+									ФИО кассира:
+									<span id="cashierName">{{ cashierName }}</span>
+								</li>
+								<li class="list-group-item">
+									ИНН кассира:
+									<span id="cashierVatin">{{ cashierVatin }}</span>
+								</li>
+								<li class="list-group-item">
+									ККТ:
+									<a href="#kktNumber" id="kktNumber">
+										<span class="spinner-grow spinner-grow-sm"
+											role="status"></span>
+									</a>
+								</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="modal fade modal-lg"
+		id="inOutCashModal"
+		tabindex="-1"
+		aria-labelledby="inOutCashModalLabel"
+		aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h1 class="modal-title fs-5" id="inOutCashModalLabel"></h1>
+					<button type="button"
+						class="btn-close"
+						data-bs-dismiss="modal"
+						aria-label="Close"></button>
+				</div>
+				<div class="modal-body">
+					<form>
+						<div class="mb-3">
+							<label for="cash-amount"
+								id="cash-amount-label"
+								class="col-form-label"></label>
+							<div class="input-group has-validation">
+								<input type="number"
+									step="0.01"
+									min="0"
+									class="form-control"
+									id="cash-amount" />
+								<div class="invalid-feedback">Укажите сумму!</div>
+							</div>
+						</div>
+					</form>
+				</div>
+				<div class="modal-footer">
+					<button type="button"
+						class="btn btn-secondary"
+						data-bs-dismiss="modal">
+						Закрыть
+					</button>
+					<button type="button"
+						class="btn btn-primary"
+						id="cash-operation-button"></button>
+				</div>
+			</div>
+		</div>
+	</div>
+{% endblock body %}
