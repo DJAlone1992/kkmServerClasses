@@ -91,50 +91,6 @@ function paymentCash() {
 	getCommandParams('paymentCash', { amount });
 }
 
-/**
- * Формирует строку параметров URL для запроса команды.
- *
- * @param {string} action - Название команды (например, 'depositCash')
- * @param {Object} additionalParams - Дополнительные параметры команды
- * @returns {string} Строка параметров URL
- */
-function getUrlParams(action, additionalParams = {}) {
-	// создаем объект URLSearchParams для удобного формирования параметров
-	let params = new URLSearchParams();
-
-	// добавляем основную команду
-	params.append('command', action);
-
-	// добавляем дополнительные параметры
-	for (let key in additionalParams) {
-		if (additionalParams.hasOwnProperty(key)) {
-			params.append(key, additionalParams[key]);
-		}
-	}
-
-	// добавляем информацию о кассире
-	const cashierNameEl = document.getElementById('cashierName');
-	if (cashierNameEl) {
-		params.append('cashierName', cashierNameEl.textContent);
-	}
-
-	const cashierVatinEl = document.getElementById('cashierVatin');
-	if (cashierVatinEl) {
-		params.append('cashierVatin', cashierVatinEl.textContent);
-	}
-
-	// добавляем номер ККТ
-	const kktNumberEl = document.getElementById('kktNumber');
-	if (kktNumberEl) {
-		params.append('kktNumber', kktNumberEl.textContent);
-	}
-
-	// добавляем уникальный ID команды
-	params.append('idCommand', guid());
-
-	// возвращаем строку параметров
-	return params.toString();
-}
 
 /**
  * Получает параметры команды и отправляет GET-запрос на сервер.
