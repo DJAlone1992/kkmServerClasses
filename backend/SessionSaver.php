@@ -7,7 +7,9 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Djalone\KkmServerClasses\Services\Logger;
 
-require_once __DIR__ . '/../vendor/autoload.php';
+if (!class_exists('Symfony\Component\HttpFoundation\Request')) {
+    require_once __DIR__ . '/../vendor/autoload.php';
+}
 
 $logger = Logger::getInstance();
 
