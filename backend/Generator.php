@@ -21,7 +21,10 @@ use Symfony\Component\HttpFoundation\Response;
 use Djalone\KkmServerClasses\Services\Logger;
 
 // Подключаем автозагрузчик Composer
-require_once __DIR__ . '/../vendor/autoload.php';
+if (!class_exists('Symfony\Component\HttpFoundation\Request')) {
+	require_once __DIR__ . '/../vendor/autoload.php';
+}
+
 
 /**
  * Функция валидации входных параметров запроса
