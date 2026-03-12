@@ -40,7 +40,7 @@ document.addEventListener('DOMContentLoaded', function () {
 function getActiveKKt() {
 	// Отправляем запрос на получение сохраненного номера ККТ из сессии
 	myFetch(
-		'../backend/SessionSaver.php?action=get',
+		'/SessionSaver.php?action=get',
 		function (response) {
 			// Проверяем, есть ли ошибка в ответе (нет сохраненного номера)
 			if (response.error) {
@@ -50,7 +50,7 @@ function getActiveKKt() {
 
 				let params = getUrlParams(COMMAND_DEVICE_LIST);
 				// Отправляем запрос на получение списка устройств
-				myFetch(`../backend/Generator.php?${params}`, showKktSwitcher);
+				myFetch(`/Generator.php?${params}`, showKktSwitcher);
 			} else {
 				// Если номер сохранен, применяем его
 				applyKktNumber(response);
@@ -127,7 +127,7 @@ function showKktSwitcher(resultJson) {
 	if (kktCount === 1) {
 		kktNumber = kktList[0];
 		myFetch(
-			'../backend/SessionSaver.php?action=set&kktNumber=' + encodeURIComponent(kktNumber),
+			'/SessionSaver.php?action=set&kktNumber=' + encodeURIComponent(kktNumber),
 			applyKktNumber,
 			false,
 		);
@@ -201,7 +201,8 @@ function chooseKktClick(event) {
 	}
 	// Отправляем запрос на сохранение выбранного номера ККТ
 	myFetch(
-		'../backend/SessionSaver.php?action=set&kktNumber=' + encodeURIComponent(selectedKktNumber),
+		'/SessionSaver.php?action=set&kktNumber=' +
+			encodeURIComponent(selectedKktNumber),
 		applyKktNumber,
 		false,
 	);
@@ -216,14 +217,15 @@ function chooseKktClick(event) {
 function changeKkt() {
 	// Отправляем запрос на очистку сохраненного номера ККТ
 	myFetch(
-		'../backend/SessionSaver.php?action=clear',
+		'/SessionSaver.php?action=clear',
 		function (response) {
 			// Очищаем глобальную переменную
 			kktNumber = null;
 			// Показываем индикатор загрузки
 			const kktNumberElement = document.getElementById('kktNumber');
 			if (kktNumberElement) {
-				kktNumberElement.innerHTML = '<span class="spinner-grow spinner-grow-sm" role="status"></span>';
+				kktNumberElement.innerHTML =
+					'<span class="spinner-grow spinner-grow-sm" role="status"></span>';
 			}
 			// Запускаем процесс получения активной ККТ заново
 			getActiveKKt();

@@ -38,22 +38,27 @@ class Helper
 	 * @param string $callbackUrl URL для обратного вызова после печати.
 	 * @return string HTML-код формы и скрипта для автоматической отправки.
 	 */
-	public static function echoForm(Cheque $cheque, string $callbackUrl): string
+	public static function echoForm(Cheque $cheque, string $callbackUrl, string $customID = '', bool $autoSubmit = true, string $frontendDir = '/frontend'): string
 	{
 		$chequeJSON = htmlspecialchars(Serializer::serializeCheque($cheque));
 		$callbackUrl = htmlspecialchars($callbackUrl);
-		$path = __DIR__ . '/../../frontend/printer.php';
+		$path = $frontendDir . '/printer.php';
 		$result = [
-			"<form id=\"printerRequestForm\" action=\"{$path}\" method=\"post\">",
+			"<form target=\"_blank\" id=\"printerRequestForm_{$customID}\" action=\"{$path}\" method=\"post\">",
 			"<input type=\"hidden\" name=\"callbackUrl\" value=\"{$callbackUrl}\">",
 			"<input type=\"hidden\" name=\"chequeJson\" value=\"{$chequeJSON}\">",
 			'</form>',
 			'<script>',
 			"document.addEventListener('DOMContentLoaded', function() {",
-			"    document.getElementById('printerRequestForm').submit();",
+			$autoSubmit ? " document.getElementById('printerRequestForm_{$customID}').submit();" : '',
 			'});',
 			'</script>',
 		];
 		return implode($result);
+	}
+
+	public static function formSubmitScript(string $customID = ''): string
+	{
+		return "document.getElementById('printerRequestForm_{$customID}').submit();";
 	}
 }

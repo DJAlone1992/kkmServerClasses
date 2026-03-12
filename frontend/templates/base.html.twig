@@ -6,7 +6,7 @@
 		<title>Функции взаимодействия с ФР</title>
 		<script>var KkmServerAddIn = {};</script>
 		<link rel="stylesheet"
-			href="../../vendor/twbs/bootstrap/dist/css/bootstrap.min.css" /> {% block stylesheets %}{% endblock stylesheets %}
+			href="{{ vendorDir }}/twbs/bootstrap/dist/css/bootstrap.min.css" /> {% block stylesheets %}{% endblock stylesheets %}
 	</head>
 	<body class="d-flex align-items-center justify-content-center py-4">
 		{% block body %}{% endblock body %}
@@ -52,12 +52,17 @@
 				</div>
 			</div>
 		</div>
+		<script type="text/javascript">
+			const frontendDir = "{{ frontendDir }}";
+			const backendDir = "{{ backendDir }}";
+			const vendorDir = "{{ vendorDir }}";
+		</script>
 		<script type="text/javascript"
-			src="../../vendor/twbs/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-		<script type="text/javascript" src="js/base/baseFunctions.js"></script>
-		<script type="text/javascript" src="js/base/operationsModal.js"></script>
-		<script type="text/javascript" src="js/base/kkmSwitcher.js"></script>
-		<script type="text/javascript" src="js/base/moment-with-locales.js"></script>
+			src="{{ vendorDir }}/twbs/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+		<script type="text/javascript" src="{{ frontendDir }}/js/base/baseFunctions.js"></script>
+		<script type="text/javascript" src="{{ frontendDir }}/js/base/operationsModal.js"></script>
+		<script type="text/javascript" src="{{ frontendDir }}/js/base/kkmSwitcher.js"></script>
+		<script type="text/javascript" src="{{ frontendDir }}/js/base/moment-with-locales.js"></script>
 		{% block javascript %}{% endblock javascript %}
 	</body>
 </html>
