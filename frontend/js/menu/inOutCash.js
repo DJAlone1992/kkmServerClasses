@@ -105,7 +105,7 @@ function getCommandParams(action, additionalParams = {}, successCallback = null)
 	let params = getUrlParams(action, additionalParams);
 
 	// отправляем запрос на бэкенд
-	myFetch(`../backend/Generator.php?${params}`, successCallback);
+	myFetch(`/Generator.php?${params}`, successCallback);
 }
 
 // инициализация при загрузке DOM

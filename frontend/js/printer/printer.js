@@ -116,12 +116,14 @@ function runCheque() {
 	if (chequePrePrintModal) {
 		chequePrePrintModal.hide();
 	}
+
 	// Получаем подготовленный JSON из data-атрибута кнопки
 	const runChequeButton = document.getElementById('runCheque');
 	if (!runChequeButton) {
 		console.error('Элемент с id "runCheque" не найден.');
 		return;
 	}
+
 	let json;
 	try {
 		json = JSON.parse(runChequeButton.dataset.preparedJson);
@@ -129,6 +131,21 @@ function runCheque() {
 		console.error('Ошибка парсинга JSON из dataset.preparedJson:', e);
 		return;
 	}
+
+	const totalReceivedCashEl = document.getElementById('totalReceivedCash');
+	if (totalReceivedCashEl) {
+		totalReceivedCashEl.setAttribute('disabled', 'disabled');
+	}
+	const cancelPrintEl = document.getElementById('cancelPrint');
+	if (cancelPrintEl) {
+		cancelPrintEl.setAttribute('disabled', 'disabled');
+	}
+	const printChequeButton = document.getElementById('printCheque');
+	if (printChequeButton) {
+		printChequeButton.setAttribute('disabled', 'disabled');
+	}
+
+	runChequeButton.setAttribute('disabled', 'disabled');
 	// Добавляем номер ККТ
 	json.KktNumber = kktNumber;
 	// Выполняем команду печати чека

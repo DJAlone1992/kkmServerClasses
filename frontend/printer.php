@@ -3,10 +3,7 @@
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
-use Djalone\KkmServerClasses\Cheque;
 use Djalone\KkmServerClasses\Cheque\Enums\PaymentTypes;
-use Djalone\KkmServerClasses\Cheque\Items\Position;
-use Djalone\KkmServerClasses\Services\CustomGUID;
 use Djalone\KkmServerClasses\Services\Serializer;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -14,7 +11,20 @@ use Twig\Environment;
 use Twig\Loader\FilesystemLoader;
 use Twig\TwigFilter;
 
-require_once __DIR__ . '/../vendor/autoload.php';
+if (!class_exists('Symfony\Component\HttpFoundation\Request')) {
+	require_once __DIR__ . '/../vendor/autoload.php';
+}
+
+if (!defined('FRONTEND_DIR')) {
+	define('FRONTEND_DIR', str_replace($_SERVER['DOCUMENT_ROOT'], '', __DIR__));
+}
+if (!defined('BACKEND_DIR')) {
+	define('BACKEND_DIR', str_replace($_SERVER['DOCUMENT_ROOT'], '', __DIR__ . '/../backend'));
+}
+if (!defined('VENDOR_DIR')) {
+	define('VENDOR_DIR', str_replace($_SERVER['DOCUMENT_ROOT'], '', __DIR__ . '/../vendor'));
+}
+
 
 $twig = new Environment(new FilesystemLoader(__DIR__ . '/templates'));
 $request = Request::createFromGlobals();
@@ -59,6 +69,9 @@ $context = [
 	'chequeJson' => $cheque->toJson(),
 	'cheque' => $cheque->toRealArray(),
 	'callbackUrl' => $callbackUrl,
+	'vendorDir' => VENDOR_DIR,
+	'frontendDir' => FRONTEND_DIR,
+	'backendDir' => BACKEND_DIR,
 ];
 $twig->addFilter(
 	new TwigFilter(

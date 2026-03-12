@@ -141,6 +141,7 @@ function guid() {
  * @returns {Promise<Object>|void} возвращает данные или промис
  */
 async function myFetch(url, successCallback, execute = true, errorCallback) {
+	url = backendDir.replace(/\/$/, '') + url;
 	try {
 		// делаем GET-запрос
 		const res = await fetch(url, {
