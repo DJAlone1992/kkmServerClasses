@@ -48,7 +48,7 @@ class Logger
 		$generalHandler = new RotatingFileHandler(
 			$logsDir . '/app.log',
 			10, // Максимум 10 файлов
-			\Monolog\Level::Debug,
+			100,
 			true,
 			0664,
 			true
@@ -59,7 +59,7 @@ class Logger
 		$errorHandler = new RotatingFileHandler(
 			$logsDir . '/error.log',
 			10, // Максимум 10 файлов
-			\Monolog\Level::Error,
+			400,
 			true,
 			0664,
 			true
