@@ -1,6 +1,7 @@
 <?php
 
 use Djalone\KkmServerClasses\Cheque;
+use Djalone\KkmServerClasses\Cheque\Enums\PaymentTypes;
 use Djalone\KkmServerClasses\Cheque\Items\Position;
 use Djalone\KkmServerClasses\Services\CustomGUID;
 use Djalone\KkmServerClasses\Services\Helper;
@@ -20,6 +21,9 @@ $cheque->setClientAddress('+79998887766')->setClientInfo('Петров П.П.');
 
 $cheque->addPosition(
     new Position('Товар 1', 1000, 1000)
+)
+    ->addPosition(
+        (new Position('Товар 2', 2000, 2000))->setPaymentType(PaymentTypes::Electronic)
 );
 
 ?>

@@ -2,6 +2,7 @@
 
 namespace Djalone\KkmServerClasses\Cheque\Enums;
 
+use ReflectionClass;
 
 /**
  *  Признак предмета расчета. Тег ОФД 1212. Для ФФД.1.05 и выше обязательное поле
@@ -61,45 +62,73 @@ class SignCalculationObject
 	// 26: "ПЛАТЕЖ КАЗИНО" прием и выплата денежных средств при осуществлении казино и залами игровых автоматов расчетов с использованием обменных знаков игорного заведения
 	public const CASINO_PAYMENT = 26;
 
-	public function getName(): string
+	public static function getName($value): string
 	{
-		return match ($this) {
-			self::GOODS => 'Товар',
-			self::EXCISABLE_GOODS => 'Подакцизный товар',
-			self::WORK => 'Работа',
-			self::SERVICE => 'Услуга',
-			self::GAMBLING_BET => 'Ставка азартной игры',
-			self::GAMBLING_WIN => 'Выигрыш азартной игры',
-			self::LOTTERY_TICKET => 'Лотерейный билет',
-			self::LOTTERY_WIN => 'Выигрыш лотереи',
-			self::PROVIDING_RID => 'Предоставление РИД',
-			self::PAYMENT => 'Платеж',
-			self::AGENT_COMMISSION => 'Агентское вознаграждение',
-			self::COMPOSITE => 'Составной предмет расчета',
-			self::OTHER => 'Иной предмет расчета',
-			self::PROPERTY_RIGHT => 'Имущественное право',
-			self::UNREALIZED_INCOME => 'Внереализационный доход',
-			self::INSURANCE_PREMIUM => 'Страховые взносы',
-			self::TRADE_FEE => 'Торговый сбор',
-			self::RESORT_FEE => 'Курортный сбор',
-			self::DEPOSIT => 'Залог',
-			self::EXPENSE => 'Расход',
-			self::INSURANCE_PREMIUM_IP => 'Взносы на ОПС ИП',
-			self::INSURANCE_PREMIUM_OSP => 'Взносы на ОПС',
-			self::MEDICAL_INSURANCE_IP => 'Взносы на ОМС ИП',
-			self::MEDICAL_INSURANCE => 'Взносы на ОМС',
-			self::SOCIAL_INSURANCE => 'Взносы на ОСС',
-			self::CASINO_PAYMENT => 'Платеж казино',
-			default => 'Не известно'
-		};
+		switch ($value) {
+			case self::GOODS:
+				return 'Товар';
+			case self::EXCISABLE_GOODS:
+				return 'Подакцизный товар';
+			case self::WORK:
+				return 'Работа';
+			case self::SERVICE:
+				return 'Услуга';
+			case self::GAMBLING_BET:
+				return 'Ставка азартной игры';
+			case self::GAMBLING_WIN:
+				return 'Выигрыш азартной игры';
+			case self::LOTTERY_TICKET:
+				return 'Лотерейный билет';
+			case self::LOTTERY_WIN:
+				return 'Выигрыш лотереи';
+			case self::PROVIDING_RID:
+				return 'Предоставление РИД';
+			case self::PAYMENT:
+				return 'Платеж';
+			case self::AGENT_COMMISSION:
+				return 'Агентское вознаграждение';
+			case self::COMPOSITE:
+				return 'Составной предмет расчета';
+			case self::OTHER:
+				return 'Иной предмет расчета';
+			case self::PROPERTY_RIGHT:
+				return 'Имущественное право';
+			case self::UNREALIZED_INCOME:
+				return 'Внереализационный доход';
+			case self::INSURANCE_PREMIUM:
+				return 'Страховые взносы';
+			case self::TRADE_FEE:
+				return 'Торговый сбор';
+			case self::RESORT_FEE:
+				return 'Курортный сбор';
+			case self::DEPOSIT:
+				return 'Залог';
+			case self::EXPENSE:
+				return 'Расход';
+			case self::INSURANCE_PREMIUM_IP:
+				return 'Взносы на ОПС ИП';
+			case self::INSURANCE_PREMIUM_OSP:
+				return 'Взносы на ОПС';
+			case self::MEDICAL_INSURANCE_IP:
+				return 'Взносы на ОМС ИП';
+			case self::MEDICAL_INSURANCE:
+				return 'Взносы на ОМС';
+			case self::SOCIAL_INSURANCE:
+				return 'Взносы на ОСС';
+			case self::CASINO_PAYMENT:
+				return 'Платеж казино';
+			default:
+				return 'Не известно';
+		}
 	}
 
 	public static function getArray(): array
 	{
-
+		$reflection = new ReflectionClass(self::class);
+		$cases = $reflection->getConstants();
 		$result = [];
-		foreach (self::cases() as $value) {
-			$result[$value->value] = $value->getName();
+		foreach ($cases as $value) {
+			$result[$value] = self::getName($value);
 		}
 		return $result;
 	}

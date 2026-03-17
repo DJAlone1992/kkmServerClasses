@@ -189,10 +189,10 @@ final class PositionTest extends TestCase
         $this->assertSame('100.00', $register['Price']);
         $this->assertSame('200.00000', $register['Amount']);
         $this->assertSame(5, $register['Department']);
-        $this->assertSame(Tax::NDS_10->value, $register['Tax']);
-        $this->assertSame(SignMethodCalculation::FULL_PAYMENT->value, $register['SignMethodCalculation']);
-        $this->assertSame(SignCalculationObject::SERVICE->value, $register['SignCalculationObject']);
-        $this->assertSame(MeasureOfQuantity::UNITS->value, $register['MeasureOfQuantity']);
-        $this->assertSame(PaymentTypes::Cash->value, $register['internalPaymentType']);
+        $this->assertSame(Tax::NDS_10, $register['Tax']);
+        $this->assertSame(SignMethodCalculation::FULL_PAYMENT, $register['SignMethodCalculation']);
+        $this->assertSame(SignCalculationObject::SERVICE, $register['SignCalculationObject']);
+        $this->assertSame(MeasureOfQuantity::UNITS, $register['MeasureOfQuantity']);
+        $this->assertSame(PaymentTypes::Cash, $register['internalPaymentType']);
     }
 }

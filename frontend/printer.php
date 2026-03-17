@@ -76,11 +76,12 @@ $context = [
 $twig->addFilter(
 	new TwigFilter(
 		'paymentType',
-		fn(?int $value) => (is_null($value)
-			? PaymentTypes::Cash
-			: (PaymentTypes::tryFrom($value) ?:
-			PaymentTypes::Cash)
-		)->getShortName()
+		fn(?int $value) => PaymentTypes::getShortName(
+			is_null($value)
+				? PaymentTypes::Cash
+				: (PaymentTypes::tryFrom($value) ?:
+					PaymentTypes::Cash)
+		)
 	)
 );
 $response = new Response(

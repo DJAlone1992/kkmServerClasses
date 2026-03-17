@@ -2,6 +2,8 @@
 
 namespace Djalone\KkmServerClasses\Cheque\Enums;
 
+use ReflectionClass;
+
 /**
  * Тип оплаты.
  * Виртуальный тип, для механизма отправки.
@@ -13,9 +15,9 @@ class PaymentTypes
     public const Advanced = 3;
     public const Credit = 4;
     public const CashProvision = 5;
-    public function getShortName(): string
+    public static function getShortName($value): string
     {
-        switch ($this) {
+        switch ($value) {
             case self::Cash:
                 return 'Нал';
             case self::Electronic:
@@ -26,6 +28,8 @@ class PaymentTypes
                 return 'Из кредита';
             case self::CashProvision:
                 return 'В кредит';
+            default:
+                return 'Не известно';
         }
     }
 
@@ -48,5 +52,16 @@ class PaymentTypes
             default:
                 return null;
         }
+    }
+
+    public static function getArray(): array
+    {
+        $reflection = new ReflectionClass(self::class);
+        $cases = $reflection->getConstants();
+        $result = [];
+        foreach ($cases as $value) {
+            $result[$value] = self::getShortName($value);
+        }
+        return $result;
     }
 }

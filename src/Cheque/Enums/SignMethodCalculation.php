@@ -2,6 +2,8 @@
 
 namespace Djalone\KkmServerClasses\Cheque\Enums;
 
+use ReflectionClass;
+
 /**
  * Признак способа расчета. Тег ОФД 1214. Для ФФД.1.05 и выше обязательное поле
  */
@@ -22,25 +24,34 @@ class SignMethodCalculation
 	// 7: "ОПЛАТА КРЕДИТА (Оплата предмета расчета после его передачи с оплатой в кредит )"
 	public const FROM_CREDIT = 7;
 
-	public function getName(): string
+	public static function getName($value): string
 	{
-		return match ($this) {
-			self::FULL_PAYMENT => 'Предоплата 100%',
-			self::PREPAYMENT => 'Предоплата',
-			self::AVANCE => 'Аванс',
-			self::FULL_PAYMENT => 'Полный расчет',
-			self::PARTIAL_PAYMENT => 'Частичный расчет',
-			self::TO_CREDIT => 'Передача в кредит',
-			self::FROM_CREDIT => 'Оплата кредита',
-			default => 'Не известно'
-		};
+		switch ($value) {
+			case self::FULL_PAYMENT:
+				return 'Предоплата 100%';
+			case self::PREPAYMENT:
+				return 'Предоплата';
+			case self::AVANCE:
+				return 'Аванс';
+			case self::FULL_PAYMENT:
+				return 'Полный расчет';
+			case self::PARTIAL_PAYMENT:
+				return 'Частичный расчет';
+			case self::TO_CREDIT:
+				return 'Передача в кредит';
+			case self::FROM_CREDIT:
+				return 'Оплата кредита';
+			default:
+				return 'Не известно';
+		}
 	}
 	public static function getArray(): array
 	{
-
+		$reflection = new ReflectionClass(self::class);
+		$cases = $reflection->getConstants();
 		$result = [];
-		foreach (self::cases() as $value) {
-			$result[$value->value] = $value->getName();
+		foreach ($cases as $value) {
+			$result[$value] = self::getName($value);
 		}
 		return $result;
 	}

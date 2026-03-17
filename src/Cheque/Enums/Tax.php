@@ -2,6 +2,8 @@
 
 namespace Djalone\KkmServerClasses\Cheque\Enums;
 
+use ReflectionClass;
+
 /**
  * Налоговая ставка
  */
@@ -18,27 +20,40 @@ class Tax
 	public const NDS_22_122 = 122;
 	public const NDS_10_110 = 110;
 
-	public function getName(): string
+	public static function getName($value): string
 	{
-		return match ($this) {
-			self::NDS_0 => 'НДС 0%',
-			self::NDS_5 => 'НДС 5%',
-			self::NDS_7 => 'НДС 7%',
-			self::NDS_10 => 'НДС 10%',
-			self::NDS_22 => 'НДС 22%',
-			self::NDS_NONE => 'Без НДС',
-			self::NDS_5_105 => 'НДС 5/105',
-			self::NDS_7_107 => 'НДС 7/107',
-			self::NDS_22_122 => 'НДС 22/122',
-			self::NDS_10_110 => 'НДС 10/110',
-			default => 'Не известно'
-		};
+		switch ($value) {
+			case self::NDS_0:
+				return 'НДС 0%';
+			case self::NDS_5:
+				return 'НДС 5%';
+			case self::NDS_7:
+				return 'НДС 7%';
+			case self::NDS_10:
+				return 'НДС 10%';
+			case self::NDS_22:
+				return 'НДС 22%';
+			case self::NDS_NONE:
+				return 'Без НДС';
+			case self::NDS_5_105:
+				return 'НДС 5/105';
+			case self::NDS_7_107:
+				return 'НДС 7/107';
+			case self::NDS_22_122:
+				return 'НДС 22/122';
+			case self::NDS_10_110:
+				return 'НДС 10/110';
+			default:
+				return 'Не известно';
+		}
 	}
 	public static function getArray(): array
 	{
+		$reflection = new ReflectionClass(self::class);
+		$cases = $reflection->getConstants();
 		$result = [];
-		foreach (self::cases() as $value) {
-			$result[$value->value] = $value->getName();
+		foreach ($cases as $value) {
+			$result[$value] = self::getName($value);
 		}
 		return $result;
 	}

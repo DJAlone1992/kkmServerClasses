@@ -2,6 +2,8 @@
 
 namespace Djalone\KkmServerClasses\Cheque\Enums;
 
+use ReflectionClass;
+
 /**
  * Тип чека, Тег 1054;
  */
@@ -24,25 +26,36 @@ class ChequeType
     // 13 – корректировка возврата покупки/расхода; (>=ФФД 1.1)
     public const OUTCOME_RETURN_CORRECTION = 13;
 
-    public function getName(): string
+    public static function getName($value): string
     {
-        return match ($this) {
-            self::INCOME => 'Продажа/приход',
-            self::INCOME_RETURN => 'Возврат продажи/прихода',
-            self::INCOME_CORRECTION => 'Корректировка продажи/прихода',
-            self::INCOME_RETURN_CORRECTION => 'Корректировка возврата продажи/прихода',
-            self::OUTCOME => 'Покупка/расход',
-            self::OUTCOME_RETURN => 'Возврат покупки/расхода',
-            self::OUTCOME_CORRECTION => 'Корректировка покупки/расхода',
-            self::OUTCOME_RETURN_CORRECTION => 'Корректировка возврата покупки/расхода',
-            default => 'Не известно'
-        };
+        switch ($value) {
+            case self::INCOME:
+                return 'Продажа/приход';
+            case self::INCOME_RETURN:
+                return 'Возврат продажи/прихода';
+            case self::INCOME_CORRECTION:
+                return 'Корректировка продажи/прихода';
+            case self::INCOME_RETURN_CORRECTION:
+                return 'Корректировка возврата продажи/прихода';
+            case self::OUTCOME:
+                return 'Покупка/расход';
+            case self::OUTCOME_RETURN:
+                return 'Возврат покупки/расхода';
+            case self::OUTCOME_CORRECTION:
+                return 'Корректировка покупки/расхода';
+            case self::OUTCOME_RETURN_CORRECTION:
+                return 'Корректировка возврата покупки/расхода';
+            default:
+                return 'Не известно';
+        }
     }
     public static function getArray(): array
     {
+        $reflection = new ReflectionClass(self::class);
+        $cases = $reflection->getConstants();
         $result = [];
-        foreach (self::cases() as $value) {
-            $result[$value->value] = $value->getName();
+        foreach ($cases as $value) {
+            $result[$value] = self::getName($value);
         }
         return $result;
     }

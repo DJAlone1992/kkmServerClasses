@@ -2,6 +2,8 @@
 
 namespace Djalone\KkmServerClasses\Cheque\Enums;
 
+use ReflectionClass;
+
 /**
  * Единицы измерения
  */
@@ -57,43 +59,69 @@ class MeasureOfQuantity
     //Прочее
     public const OTHER = 255;
 
-    public function getName(): string
+    public static function getName($value): string
     {
-        return match ($this) {
-            self::UNITS => 'Штука или единица',
-            self::GRAMS => 'Грамм',
-            self::KILOGRAMS => 'Килограмм',
-            self::TON => 'Тонна',
-            self::CM => 'Сантиметр',
-            self::DM => 'Дециметр',
-            self::M => 'Метр',
-            self::CM_SQUARED => 'Квадратный сантиметр',
-            self::DM_SQUARED => 'Квадратный дециметр',
-            self::M_SQUARED => 'Квадратный метр',
-            self::MILLILITER => 'Миллилитр',
-            self::LITER => 'Литр',
-            self::M_CUBED => 'Кубический метр',
-            self::KILOWATT_HOURS => 'Киловатт-час',
-            self::GIGA_CALORIES => 'Гигакалория',
-            self::DAY => 'Сутки',
-            self::HOUR => 'Час',
-            self::MINUTE => 'Минута',
-            self::SECOND => 'Секунда',
-            self::KILOBYTE => 'Килобайт',
-            self::MEGABYTE => 'Мегабайт',
-            self::GIGABYTE => 'Гигабайт',
-            self::TERABYTE => 'Терабайт',
-            self::OTHER => 'Прочее',
-            default => 'Не известно'
-        };
-    }
-    public static function getArray(): array
-    {
-
-        $result = [];
-        foreach (self::cases() as $value) {
-            $result[$value->value] = $value->getName();
+        switch ($value) {
+            case self::UNITS:
+                return 'Штука или единица';
+            case self::GRAMS:
+                return 'Грамм';
+            case self::KILOGRAMS:
+                return 'Килограмм';
+            case self::TON:
+                return 'Тонна';
+            case self::CM:
+                return 'Сантиметр';
+            case self::DM:
+                return 'Дециметр';
+            case self::M:
+                return 'Метр';
+            case self::CM_SQUARED:
+                return 'Квадратный сантиметр';
+            case self::DM_SQUARED:
+                return 'Квадратный дециметр';
+            case self::M_SQUARED:
+                return 'Квадратный метр';
+            case self::MILLILITER:
+                return 'Миллилитр';
+            case self::LITER:
+                return 'Литр';
+            case self::M_CUBED:
+                return 'Кубический метр';
+            case self::KILOWATT_HOURS:
+                return 'Киловатт-час';
+            case self::GIGA_CALORIES:
+                return 'Гигакалория';
+            case self::DAY:
+                return 'Сутки';
+            case self::HOUR:
+                return 'Час';
+            case self::MINUTE:
+                return 'Минута';
+            case self::SECOND:
+                return 'Секунда';
+            case self::KILOBYTE:
+                return 'Килобайт';
+            case self::MEGABYTE:
+                return 'Мегабайт';
+            case self::GIGABYTE:
+                return 'Гигабайт';
+            case self::TERABYTE:
+                return 'Терабайт';
+            case self::OTHER:
+                return 'Прочее';
+            default:
+                return 'Не известно';
         }
-        return $result;
     }
+   public static function getArray(): array
+	{
+		$reflection = new ReflectionClass(self::class);
+		$cases = $reflection->getConstants();
+		$result = [];
+		foreach ($cases as $value) {
+			$result[$value] = self::getName($value);
+		}
+		return $result;
+	}
 }
