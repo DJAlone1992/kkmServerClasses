@@ -13,7 +13,7 @@ enum PaymentTypes: int
 	case Credit = 4;
 	case CashProvision = 5;
 
-	public function getShortName()
+	public function getShortName(): string
 	{
 		return match ($this) {
 			self::Cash => 'Нал',
@@ -22,5 +22,15 @@ enum PaymentTypes: int
 			self::Credit => 'Из кредита',
 			self::CashProvision => 'В кредит',
 		};
+	}
+
+	public static function getArray(): array
+	{
+
+		$result = [];
+		foreach (self::cases() as $value) {
+			$result[$value->value] = $value->getShortName();
+		}
+		return $result;
 	}
 }

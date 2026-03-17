@@ -14,7 +14,10 @@ class DeviceList extends Command
 		$this->command = 'List';
 	}
 
-	public function toArray(): array
+	/**
+     * @return array<string, bool>
+     */
+    public function toArray(): array
 	{
 		return [
 			'Active' => true,

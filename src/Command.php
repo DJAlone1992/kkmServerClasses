@@ -6,7 +6,10 @@ namespace Djalone\KkmServerClasses;
  */
 abstract class Command
 {
-	protected array $errors=[];
+	/**
+     * @var string[]
+     */
+    protected array $errors=[];
 	/**
 	 * Название команды.
 	 * @var string $command
