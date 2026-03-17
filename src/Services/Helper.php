@@ -54,7 +54,7 @@ class Helper
 			'});',
 			'</script>',
 		];
-		return implode($result);
+		return implode('', $result);
 	}
 
 	public static function formSubmitScript(string $customID = ''): string

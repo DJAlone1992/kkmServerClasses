@@ -1,6 +1,7 @@
 <?php
 
 namespace Djalone\KkmServerClasses\Cheque\Enums;
+
 /**
  * Тип оплаты.
  * Виртуальный тип, для механизма отправки.
@@ -12,9 +13,9 @@ class PaymentTypes
     public const Advanced = 3;
     public const Credit = 4;
     public const CashProvision = 5;
-    public function getShortName()
-	{
-		switch ($this) {
+    public function getShortName(): string
+    {
+        switch ($this) {
             case self::Cash:
                 return 'Нал';
             case self::Electronic:
@@ -26,7 +27,7 @@ class PaymentTypes
             case self::CashProvision:
                 return 'В кредит';
         }
-	}
+    }
 
     public static function tryFrom(?int $value): ?int
     {

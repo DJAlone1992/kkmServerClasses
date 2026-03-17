@@ -1,31 +1,32 @@
 <?php
 
 namespace Djalone\KkmServerClasses;
+
 /**
  * Абстрактный класс команды.
  */
 abstract class Command
 {
 	/**
-     * @var string
-     */
-    protected string $CashierName = '';
-    /**
-     * @var string
-     */
-    protected string $CashierVatin = '';
-    /**
-     * @var string
-     */
-    protected string $KktNumber = '';
-    /**
-     * @var string
-     */
-    protected string $IdCommand = '';
-    /**
-     * @var string[]
-     */
-    protected array $errors=[];
+	 * @var string
+	 */
+	protected string $CashierName = '';
+	/**
+	 * @var string
+	 */
+	protected string $CashierVatin = '';
+	/**
+	 * @var string
+	 */
+	protected string $KktNumber = '';
+	/**
+	 * @var string
+	 */
+	protected string $IdCommand = '';
+	/**
+	 * @var string[]
+	 */
+	protected array $errors = [];
 	/**
 	 * Название команды.
 	 * @var string $command
@@ -55,24 +56,24 @@ abstract class Command
 	 * @param string $IdCommand    Уникальный идентификатор команды (необязательно).
 	 */
 	public function __construct(string $CashierName = '', string $CashierVatin = '', string $KktNumber = '', string $IdCommand = '')
-    {
-        /**
-         * @var string $CashierName
-         */
-        $this->CashierName = $CashierName;
-        /**
-         * @var string $CashierVatin
-         */
-        $this->CashierVatin = $CashierVatin;
-        /**
-         * @var string $KktNumber
-         */
-        $this->KktNumber = $KktNumber;
-        /**
-         * @var string $IdCommand
-         */
-        $this->IdCommand = $IdCommand;
-    }
+	{
+		/**
+		 * @var string $CashierName
+		 */
+		$this->CashierName = $CashierName;
+		/**
+		 * @var string $CashierVatin
+		 */
+		$this->CashierVatin = $CashierVatin;
+		/**
+		 * @var string $KktNumber
+		 */
+		$this->KktNumber = $KktNumber;
+		/**
+		 * @var string $IdCommand
+		 */
+		$this->IdCommand = $IdCommand;
+	}
 
 	/**
 	 * Установить имя кассира.
@@ -240,11 +241,11 @@ abstract class Command
 			$error = true;
 			$this->errors[] = 'ИНН кассира должен состоять из 12 цифр';
 		}
-	/*	if (strlen($this->KktNumber) < 10) {
+		/*	if (strlen($this->KktNumber) < 10) {
 			$error = true;
 			$this->errors[] = 'Номер ККТ не может быть короче 10 символов';
 		}*/
-        if (strlen($this->IdCommand) != 40) {
+		if (strlen($this->IdCommand) != 40) {
 			$error = true;
 			$this->errors[] =
 				'Идентификатор команды не может быть короче 40 символов';

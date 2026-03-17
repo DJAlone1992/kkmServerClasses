@@ -1,6 +1,7 @@
 <?php
 
 namespace Djalone\KkmServerClasses\Cheque\Enums;
+
 /**
  * Признак способа расчета. Тег ОФД 1214. Для ФФД.1.05 и выше обязательное поле
  */
@@ -20,4 +21,27 @@ class SignMethodCalculation
 	public const TO_CREDIT = 6;
 	// 7: "ОПЛАТА КРЕДИТА (Оплата предмета расчета после его передачи с оплатой в кредит )"
 	public const FROM_CREDIT = 7;
+
+	public function getName(): string
+	{
+		return match ($this) {
+			self::FULL_PAYMENT => 'Предоплата 100%',
+			self::PREPAYMENT => 'Предоплата',
+			self::AVANCE => 'Аванс',
+			self::FULL_PAYMENT => 'Полный расчет',
+			self::PARTIAL_PAYMENT => 'Частичный расчет',
+			self::TO_CREDIT => 'Передача в кредит',
+			self::FROM_CREDIT => 'Оплата кредита',
+			default => 'Не известно'
+		};
+	}
+	public static function getArray(): array
+	{
+
+		$result = [];
+		foreach (self::cases() as $value) {
+			$result[$value->value] = $value->getName();
+		}
+		return $result;
+	}
 }

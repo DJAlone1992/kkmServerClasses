@@ -2,6 +2,7 @@
 
 namespace Djalone\KkmServerClasses\Cheque\Enums;
 
+
 /**
  *  Признак предмета расчета. Тег ОФД 1212. Для ФФД.1.05 и выше обязательное поле
  */
@@ -59,4 +60,47 @@ class SignCalculationObject
 	public const SOCIAL_INSURANCE = 25;
 	// 26: "ПЛАТЕЖ КАЗИНО" прием и выплата денежных средств при осуществлении казино и залами игровых автоматов расчетов с использованием обменных знаков игорного заведения
 	public const CASINO_PAYMENT = 26;
+
+	public function getName(): string
+	{
+		return match ($this) {
+			self::GOODS => 'Товар',
+			self::EXCISABLE_GOODS => 'Подакцизный товар',
+			self::WORK => 'Работа',
+			self::SERVICE => 'Услуга',
+			self::GAMBLING_BET => 'Ставка азартной игры',
+			self::GAMBLING_WIN => 'Выигрыш азартной игры',
+			self::LOTTERY_TICKET => 'Лотерейный билет',
+			self::LOTTERY_WIN => 'Выигрыш лотереи',
+			self::PROVIDING_RID => 'Предоставление РИД',
+			self::PAYMENT => 'Платеж',
+			self::AGENT_COMMISSION => 'Агентское вознаграждение',
+			self::COMPOSITE => 'Составной предмет расчета',
+			self::OTHER => 'Иной предмет расчета',
+			self::PROPERTY_RIGHT => 'Имущественное право',
+			self::UNREALIZED_INCOME => 'Внереализационный доход',
+			self::INSURANCE_PREMIUM => 'Страховые взносы',
+			self::TRADE_FEE => 'Торговый сбор',
+			self::RESORT_FEE => 'Курортный сбор',
+			self::DEPOSIT => 'Залог',
+			self::EXPENSE => 'Расход',
+			self::INSURANCE_PREMIUM_IP => 'Взносы на ОПС ИП',
+			self::INSURANCE_PREMIUM_OSP => 'Взносы на ОПС',
+			self::MEDICAL_INSURANCE_IP => 'Взносы на ОМС ИП',
+			self::MEDICAL_INSURANCE => 'Взносы на ОМС',
+			self::SOCIAL_INSURANCE => 'Взносы на ОСС',
+			self::CASINO_PAYMENT => 'Платеж казино',
+			default => 'Не известно'
+		};
+	}
+
+	public static function getArray(): array
+	{
+
+		$result = [];
+		foreach (self::cases() as $value) {
+			$result[$value->value] = $value->getName();
+		}
+		return $result;
+	}
 }
