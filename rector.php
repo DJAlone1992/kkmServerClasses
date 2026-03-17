@@ -33,16 +33,7 @@ return RectorConfig::configure()
         //DocblockNameImportingPostRector::class,
         DocblockReturnArrayFromDirectArrayInstanceRector::class,
         DocblockVarArrayFromPropertyDefaultsRector::class,
-        DocblockVarFromParamDocblockInConstructorRector::class,
-        AddReturnDocblockDataProviderRector::class,
-        AddReturnDocblockForArrayDimAssignedObjectRector::class,
-        AddReturnDocblockForJsonArrayRector::class,
-        DocblockVarArrayFromGetterReturnRector::class,
-        DocblockGetterReturnArrayFromPropertyDocblockVarRector::class,
-        //DocblockNameImportingPostRector::class,
-        DocblockReturnArrayFromDirectArrayInstanceRector::class,
-        DocblockVarArrayFromPropertyDefaultsRector::class,
-        DocblockVarFromParamDocblockInConstructorRector::class,
+    DocblockVarFromParamDocblockInConstructorRector::class,
     ])
     ->withDowngradeSets(php74: true)
     // uncomment to reach your current PHP version
