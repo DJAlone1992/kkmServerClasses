@@ -1,0 +1,78 @@
+<div class="modal fade modal-lg"
+	id="printChequeCopyModal"
+	tabindex="-1"
+	aria-labelledby="printChequeCopyModalLabel"
+	aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h1 class="modal-title fs-5" id="printChequeCopyModalLabel">
+					Печать копии чека
+				</h1>
+				<button type="button"
+					class="btn-close"
+					data-bs-dismiss="modal"
+					aria-label="Close"></button>
+			</div>
+			<div class="modal-body">
+				<form>
+					<div class="mb-3">
+						<label for="fiscal-number"
+							id="fiscal-number-label"
+							class="col-form-label">
+							Номер фискального документа
+						</label>
+						<div class="input-group has-validation">
+							<input type="number"
+								step="1"
+								min="0"
+								max="9999999999"
+								placeholder="Укажите номер документа. Например: 0"
+								class="form-control"
+								id="fiscal-number" />
+
+							<div class="invalid-feedback">
+								Укажите число больше либо равное нулю!
+							</div>
+						</div>
+						<div id="fiscal-number-help" class="form-text">
+							Оставьте поле пустым или укажите 0 для печати копии последнего
+							документа
+						</div>
+					</div>
+					<div class="mb-3">
+						<label for="number-of-copies"
+							id="number-of-copies-label"
+							class="col-form-label">
+							Количество копий
+						</label>
+						<div class="input-group has-validation">
+							<input type="number"
+								step="1"
+								min="1"
+								max="99"
+								placeholder="Укажите количество копий документа. Например: 1"
+								class="form-control"
+								id="number-of-copies" />
+
+							<div class="invalid-feedback">
+								Укажите число больше либо равное единицы и меньше 99!
+							</div>
+						</div>
+						<div id="number-of-copies-help" class="form-text">
+							Оставьте поле пустым для печати одной копии
+						</div>
+					</div>
+				</form>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+					Закрыть
+				</button>
+				<button type="button" class="btn btn-primary" id="GetDataCheck">
+					Запуск
+				</button>
+			</div>
+		</div>
+	</div>
+</div>
