@@ -40,6 +40,10 @@ function ExecuteSuccess(result) {
 	if (!result.Message) {
 		setTimeout(hideOperationModal, 1000);
 	}
+	//Запускаем получение параметров для экрана
+	if (typeof screenParams == 'function') {
+		screenParams();
+	}
 }
 
 /**
@@ -189,7 +193,6 @@ async function myFetch(url, successCallback, execute = true, errorCallback) {
 	}
 }
 
-
 /**
  * Формирует строку параметров URL для запроса команды.
  *
@@ -214,9 +217,9 @@ function getUrlParams(action, additionalParams = {}) {
 	// добавляем информацию о кассире
 	const cashierNameEl = document.getElementById('cashierName');
 	if (cashierNameEl) {
-		if(cashierNameEl.tagName==='INPUT'){
+		if (cashierNameEl.tagName === 'INPUT') {
 			params.append('cashierName', cashierNameEl.value);
-		}else{
+		} else {
 			params.append('cashierName', cashierNameEl.textContent);
 		}
 	}
@@ -241,4 +244,20 @@ function getUrlParams(action, additionalParams = {}) {
 
 	// возвращаем строку параметров
 	return params.toString();
+}
+
+/**
+ * Получает параметры команды и отправляет GET-запрос на сервер.
+ *
+ * @param {string} action - Название команды
+ * @param {Object} additionalParams - Дополнительные параметры
+ * @param {Function|null} successCallback - Функция обратного вызова при успехе
+ * @returns {void}
+ */
+function getCommandParams(action, additionalParams = {}, successCallback = null) {
+	// формируем строку параметров
+	let params = getUrlParams(action, additionalParams);
+
+	// отправляем запрос на бэкенд
+	myFetch(`/Generator.php?${params}`, successCallback);
 }

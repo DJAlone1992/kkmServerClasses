@@ -15,6 +15,7 @@ use Djalone\KkmServerClasses\OpenShift;
 use Djalone\KkmServerClasses\PaymentCash;
 use Djalone\KkmServerClasses\XReport;
 use Djalone\KkmServerClasses\DeviceList;
+use Djalone\KkmServerClasses\GetDataCheck;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -160,7 +161,18 @@ function createCommand(Request $request)
 
 		case 'DeviceList':
 			return new DeviceList();
-
+		case 'GetDataCheck': {
+				$fiscalNumber = $request->query->get('fiscalNumber', 0);
+				$numberOfCopies = $request->query->get('numberOfCopies', 0);
+				$command = new GetDataCheck(
+					$cashierName,
+					$cashierVatin,
+					$kktNumber,
+					$idCommand
+				);
+				$command->setFiscalNumber((int) $fiscalNumber)->setNumberOfCopies((int) $numberOfCopies);
+				return $command;
+			}
 		default:
 			return null; // Неизвестная команда
 	}

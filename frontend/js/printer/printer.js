@@ -14,6 +14,12 @@ document.addEventListener('DOMContentLoaded', function () {
 	}
 	chequePrePrintModal = new bootstrap.Modal(chequePrePrintElement);
 
+	const cancelPrintEl = document.getElementById('cancelPrint');
+	if (cancelPrintEl) {
+		cancelPrintEl.addEventListener('click', () => {
+			sendCallback({ status: 'denied by user' }, 'denied');
+		});
+	}
 	// Применяем слушатель для кнопки печати чека
 	applyPrintChequeListener();
 
@@ -24,6 +30,13 @@ document.addEventListener('DOMContentLoaded', function () {
 	} else {
 		console.error('Элемент с id "runCheque" не найден.');
 	}
+
+	//При закрытии вкладки отправляет статус отмены
+	window.addEventListener('beforeunload', (event) => {
+		sendCallback({ status: 'denied by user' }, 'denied');
+	});
+
+	disablePrinterButtons();
 });
 
 /**
@@ -93,7 +106,8 @@ function applyPrintChequeListener() {
 			// Показываем элемент и устанавливаем отформатированное значение
 			modalElectronicSumEl.style.visibility = 'visible';
 			if (modalElectronicSumEl.firstChild) {
-				modalElectronicSumEl.firstChild.textContent = returnFormatted(totalElectron);
+				modalElectronicSumEl.firstChild.textContent =
+					returnFormatted(totalElectron);
 			}
 		} else {
 			// Скрываем элемент, если сумма равна нулю или невалидна
@@ -105,7 +119,6 @@ function applyPrintChequeListener() {
 		}
 	});
 }
-
 
 /**
  * Запускает процесс печати чека.
@@ -150,4 +163,36 @@ function runCheque() {
 	json.KktNumber = kktNumber;
 	// Выполняем команду печати чека
 	ExecuteCommand(json, printChequeCallback);
+}
+
+function disablePrinterButtons() {
+	const cancelPrintEl = document.getElementById('cancelPrint');
+	if (cancelPrintEl) {
+		cancelPrintEl.setAttribute('disabled', 'disabled');
+	}
+	const printChequeButton = document.getElementById('printCheque');
+	if (printChequeButton) {
+		printChequeButton.setAttribute('disabled', 'disabled');
+	}
+	const runChequeButton = document.getElementById('runCheque');
+	if (runChequeButton) {
+		runChequeButton.setAttribute('disabled', 'disabled');
+	}
+}
+function enablePrinterCancelButton() {
+	const cancelPrintEl = document.getElementById('cancelPrint');
+	if (cancelPrintEl) {
+		cancelPrintEl.removeAttribute('disabled');
+	}
+}
+function enablePrinterButtons() {
+	enablePrinterCancelButton();
+	const printChequeButton = document.getElementById('printCheque');
+	if (printChequeButton) {
+		printChequeButton.removeAttribute('disabled');
+	}
+	const runChequeButton = document.getElementById('runCheque');
+	if (runChequeButton) {
+		runChequeButton.removeAttribute('disabled');
+	}
 }

@@ -84,7 +84,12 @@ function applyKktNumber(response) {
 		kktNumberElement.innerText = response.kktNumber;
 	}
 	// Скрываем модальное окно через 1 секунду
-	setTimeout(hideOperationModal, 1000);
+	setTimeout(hideOperationModal, 500);
+
+	//Запускаем получение параметров для экрана
+	if (typeof screenParams == 'function') {
+		setTimeout(screenParams, 700);
+	}
 }
 
 /**

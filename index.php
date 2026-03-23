@@ -13,17 +13,16 @@ require_once 'vendor/autoload.php';
 
 $cheque = new Cheque(
     'Иванов И.И.',
-    '123456789012',
+    '860205784807',
     '',
     CustomGUID::getCommandGuid()
 );
-$cheque->setClientAddress('+79998887766')->setClientInfo('Петров П.П.');
+$cheque->setClientAddress('+79998887766')->setClientInfo('Петров П.П.')->setIsFiscal(true);
 
 $cheque->addPosition(
     new Position('Товар 1', 1000, 1000)
-)
-    ->addPosition(
-        (new Position('Товар 2', 2000, 2000))->setPaymentType(PaymentTypes::Electronic)
+)->addPosition(
+    (new Position('Товар 2', 2000, 2000))->setPaymentType(PaymentTypes::Electronic)
 );
 
 ?>
@@ -38,7 +37,7 @@ $cheque->addPosition(
 
 <body>
     <a href="/frontend/menu.php?cashierName=Иванов И.И.&cashierVatin=123456789012">Меню работы с ККТ</a>
-    <?= Helper::echoForm($cheque, 'testCallback.php', '', false) ?>
+    <?= Helper::echoForm($cheque, 'testCallback.php', '', [], false) ?>
     <button type="button" onclick="<?= Helper::formSubmitScript() ?>">Тестовый чек</button>
 </body>
 

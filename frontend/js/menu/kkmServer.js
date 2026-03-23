@@ -191,6 +191,7 @@ const kktStatusFields = {
 	OFD_Error: {
 		short: true,
 		name: 'Ошибка ОФД',
+		error: true,
 	},
 	// Числовой код ошибки ОФД - выводится в кратком статусе
 	OFD_NumErrorDoc: {
@@ -227,6 +228,7 @@ const kktStatusFields = {
 	FN_MemOverflowl: {
 		short: false,
 		name: 'Признак переполнения памяти ФН',
+		error: true,
 	},
 	// Дата начала эксплуатации ФН - не выводится в кратком статусе, обрабатывается для форматирования даты
 	FN_DateStart: {
@@ -275,6 +277,7 @@ const kktStatusFields = {
 	PaperOver: {
 		short: true,
 		name: 'Признак окончания бумаги',
+		error: true,
 	},
 	// Остаток наличных в кассе - выводится в кратком статусе
 	BalanceCash: {
