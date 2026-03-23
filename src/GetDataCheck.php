@@ -22,13 +22,19 @@ class GetDataCheck extends Command
         $this->command = 'GetDataCheck';
     }
 
-    public function setFiscalNumber(int $fiscalNumber): static
+    /**
+     * @return static
+     */
+    public function setFiscalNumber(int $fiscalNumber)
     {
         $this->fiscalNumber = $fiscalNumber;
         return $this;
     }
 
-    public function setNumberOfCopies(int $numberOfCopies): static
+    /**
+     * @return static
+     */
+    public function setNumberOfCopies(int $numberOfCopies)
     {
         $this->numberOfCopies = $numberOfCopies;
         return $this;
