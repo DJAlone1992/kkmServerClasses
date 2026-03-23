@@ -538,4 +538,32 @@ class Cheque extends Command
 
 		return !$error;
 	}
+	/**
+	 * Создание экземпляра фискального чека
+	 *
+	 * @return Cheque
+	 */
+	public static function getNewFiscalCheque(
+		string $cashierName = '',
+		string $cashierVatin = '',
+		string $kktNumber = '',
+		string $idCommand = ''
+	): Cheque {
+		return (new Cheque($cashierName, $cashierVatin, $kktNumber, $idCommand))
+			->setIsFiscal(true);
+	}
+	/**
+	 * Создание экземпляра не фискального чека
+	 *
+	 * @return Cheque
+	 */
+	public static function getNewNonFiscalCheque(
+		string $cashierName = '',
+		string $cashierVatin = '',
+		string $kktNumber = '',
+		string $idCommand = ''
+	): Cheque {
+		return (new Cheque($cashierName, $cashierVatin, $kktNumber, $idCommand))
+			->setIsFiscal(false);
+	}
 }
