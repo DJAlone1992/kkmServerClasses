@@ -31,6 +31,9 @@ $request = Request::createFromGlobals();
 
 $callbackUrl = $request->request->get('callbackUrl', null);
 $chequeJson = $request->request->get('chequeJson', null);
+if (str_contains($chequeJson, '&quot;')) {
+	$chequeJson = htmlspecialchars_decode($chequeJson);
+}
 
 $error = false;
 $errors = [];
