@@ -92,21 +92,7 @@ function paymentCash() {
 }
 
 
-/**
- * Получает параметры команды и отправляет GET-запрос на сервер.
- *
- * @param {string} action - Название команды
- * @param {Object} additionalParams - Дополнительные параметры
- * @param {Function|null} successCallback - Функция обратного вызова при успехе
- * @returns {void}
- */
-function getCommandParams(action, additionalParams = {}, successCallback = null) {
-	// формируем строку параметров
-	let params = getUrlParams(action, additionalParams);
 
-	// отправляем запрос на бэкенд
-	myFetch(`/Generator.php?${params}`, successCallback);
-}
 
 // инициализация при загрузке DOM
 document.addEventListener('DOMContentLoaded', function () {
@@ -149,6 +135,19 @@ document.addEventListener('DOMContentLoaded', function () {
 			if (!direction) {
 				console.error('Направление операции не указано');
 				return;
+			}
+			// получаем признак инкассации из data-атрибута кнопки
+			const total = event.relatedTarget?.dataset?.bsTotal;
+			if (total && direction === 'out') {
+				// получаем элемент поля суммы
+				const amountInput = document.getElementById('cash-amount');
+				const balanceCash = document.getElementById('balanceCash');
+				if (balanceCash && amountInput) {
+					let outAmount = parseFloat(balanceCash.textContent);
+					if (!isNaN(outAmount) && outAmount > 0) {
+						amountInput.value = outAmount;
+					}
+				}
 			}
 
 			// устанавливаем заголовок модального окна
