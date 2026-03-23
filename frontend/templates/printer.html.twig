@@ -1,8 +1,15 @@
 {% extends "base.html.twig" %}
 {% block javascript %}
-		<script type="text/javascript" src="{{ frontendDir }}/js/printer/interface.js"></script>
-	<script type="text/javascript" src="{{ frontendDir }}/js/printer/callBack.js"></script>
-	<script type="text/javascript" src="{{ frontendDir }}/js/printer/printer.js"></script>
+	<script type="text/javascript"
+		src="{{ frontendDir }}/js/menu/kkmServer.js"></script>
+	<script type="text/javascript"
+		src="{{ frontendDir }}/js/printer/interface.js"></script>
+	<script type="text/javascript"
+		src="{{ frontendDir }}/js/printer/callBack.js"></script>
+	<script type="text/javascript"
+		src="{{ frontendDir }}/js/printer/printer.js"></script>
+		<script type="text/javascript"
+		src="{{ frontendDir }}/js/printer/screenParams.js"></script>
 {% endblock javascript %}
 {% block body %}
 	<div class="card w-100 m-5">
@@ -239,6 +246,21 @@
 									</div>
 								</div>
 							</div>
+							<div class="row g-3 align-items-center mb-1">
+								<div class="col-3 text-end">
+									<label class="form-label" for="cashierVatin">
+										Смена:
+									</label>
+								</div>
+								<div class="col-9">
+									<div class="form-control">
+										<span id="currentShiftState">
+											<span class="spinner-grow spinner-grow-sm"
+												role="status"></span>
+										</span>
+									</div>
+								</div>
+							</div>
 						</div>
 						<div class="col-6">
 							<div class="row g-3 align-items-center mb-1">
@@ -265,6 +287,21 @@
 										class="form-control"
 										value="{{ cheque.IdCommand }}"
 										disabled />
+								</div>
+							</div>
+							<div class="row g-3 align-items-center mb-1">
+								<div class="col-3 text-end">
+									<label class="form-label" for="cashierVatin">
+										Наличие ошибок:
+									</label>
+								</div>
+								<div class="col-9">
+									<div class="form-control">
+										<span id="errorsInKkt">
+											<span class="spinner-grow spinner-grow-sm"
+												role="status"></span>
+										</span>
+									</div>
 								</div>
 							</div>
 						</div>

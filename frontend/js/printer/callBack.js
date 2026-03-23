@@ -15,7 +15,7 @@ function printChequeCallback(response) {
 	}, 1500);
 }
 
-function sendCallback(response) {
+function sendCallback(response, action = 'confirm') {
 	// Получаем URL для callback из data-атрибута
 	const runChequeButton = document.getElementById('runCheque');
 	const callbackUrl = runChequeButton?.dataset?.callbackUrl ?? '';
@@ -24,9 +24,12 @@ function sendCallback(response) {
 		'Отправляем запрос подтверждения',
 		'Отправка подтверждения в верхнее приложение',
 	);
+	let params = new URLSearchParams();
+	params.set('data', JSON.stringify(response));
+	params.set('action', action);
 	// Отправляем запрос подтверждения
 	myFetch(
-		'/' + callbackUrl + '?data=' + JSON.stringify(response) + '&action=confirm',
+		'/' + callbackUrl + '?' + params.toString(),
 		function (response) {
 			if (response.error) {
 				showStatusError(response.errorText);
