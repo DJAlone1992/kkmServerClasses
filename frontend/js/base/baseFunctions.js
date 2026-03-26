@@ -141,19 +141,31 @@ function guid() {
  * @param {string} url - адрес для запроса
  * @param {Function} successCallback - функция, вызываемая при успехе
  * @param {boolean} [execute=true] - если true, выполнит ExecuteCommand с командой из ответа
+ * @param {Object} [postParams] - параметры POST-запроса, если указаны, то будет POST запрос, иначе - GET
  * @param {Function} [errorCallback] - функция обработки ошибок
  * @returns {Promise<Object>|void} возвращает данные или промис
  */
-async function myFetch(url, successCallback, execute = true, errorCallback) {
+async function myFetch(url, successCallback, execute = true, postParams = null, errorCallback) {
 	url = backendDir.replace(/\/$/, '') + url;
-	try {
-		// делаем GET-запрос
-		const res = await fetch(url, {
-			method: 'GET',
+	let fetchParams = {
+		method: 'GET',
+		headers: {
+			'X-Requested-With': 'XMLHttpRequest',
+		},
+	};
+	if (postParams !== null) {
+		fetchParams = {
+			method: 'POST',
 			headers: {
 				'X-Requested-With': 'XMLHttpRequest',
 			},
-		});
+			body: JSON.stringify(postParams),
+		};
+	}
+
+	try {
+		// делаем GET-запрос
+		const res = await fetch(url, fetchParams);
 
 		// если ответ не ок, обрабатываем ошибку
 		if (!res.ok) {
