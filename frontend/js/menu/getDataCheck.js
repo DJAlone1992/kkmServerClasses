@@ -82,7 +82,7 @@ document.addEventListener('DOMContentLoaded', function () {
 		}
 		printChequeCopyModalObj.hide();
 		// Отображаем модальное окно с названием операции
-		showOperationModal('Печать копии последнего чека');
+		showOperationModal('Печать копии чека');
 		// Отправляем запрос параметров команды на сервер
 		getCommandParams('GetDataCheck', {
 			fiscalNumber: fiscalNumber,

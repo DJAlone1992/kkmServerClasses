@@ -1,0 +1,50 @@
+{% extends "base.html.twig" %}
+{% block javascript %}
+	<script type="text/javascript" src="{{ frontendDir }}/js/copyPrinter/screenParams.js"></script>
+{% endblock javascript %}
+{% block body %}
+<div class="container-fluid">
+	<div class="row m-5">
+		<div class="col-12">
+			<div class="card">
+				<div class="card-body">
+					<h3 class="card-title">Печать копии чека</h3>
+					<ul class="list-group">
+                    <li class="list-group-item"id="copyPrintStatus">
+                        Печатаем копию чека с ФД # <span id="fiscal-number">{{ fiscalNumber }}</span> <span class="spinner-grow spinner-grow-sm" role="status"></span>
+                    </li>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="row m-5">
+		<div class="col-12">
+			<div class="card">
+				<div class="card-body">
+					<h3 class="card-title">Информация</h3>
+					<h5 class="card-subtitle mb-2 text-body-secondary">
+						Данные текущего пользователя и ККТ
+					</h5>
+					<ul class="list-group">
+						<li class="list-group-item">
+							ФИО кассира:
+							<span id="cashierName">{{ cashierName }}</span>
+						</li>
+						<li class="list-group-item">
+							ИНН кассира:
+							<span id="cashierVatin">{{ cashierVatin }}</span>
+						</li>
+						<li class="list-group-item">
+							ККТ:
+							<a href="#kktNumber" id="kktNumber">
+								<span class="spinner-grow spinner-grow-sm" role="status"></span>
+							</a>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+	</div>
+{% endblock %}

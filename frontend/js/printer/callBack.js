@@ -25,7 +25,7 @@ function sendCallback(response, action = 'confirm') {
 		'Отправка подтверждения в верхнее приложение',
 	);
 	let params = new URLSearchParams();
-	params.set('data', JSON.stringify(response));
+
 	params.set('action', action);
 	// Отправляем запрос подтверждения
 	myFetch(
@@ -39,5 +39,6 @@ function sendCallback(response, action = 'confirm') {
 			}
 		},
 		false,
+		{data: response}
 	);
 }

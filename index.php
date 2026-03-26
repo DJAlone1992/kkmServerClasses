@@ -36,7 +36,8 @@ $cheque->addPosition(
 </head>
 
 <body>
-    <a href="/frontend/menu.php?cashierName=Иванов И.И.&cashierVatin=123456789012">Меню работы с ККТ</a>
+    <a href="/frontend/menu.php?cashierName=Иванов И.И.&cashierVatin=123456789012">Меню работы с ККТ</a><br>
+    <a href="/frontend/copyPrinter.php?fiscalNumber=2&cashierName=Иванов И.И.&cashierVatin=123456789012">Печать копии чека №2</a><br>
     <?= Helper::echoForm($cheque, 'testCallback.php', '', [], false) ?>
     <button type="button" onclick="<?= Helper::formSubmitScript() ?>">Тестовый чек</button>
 </body>
