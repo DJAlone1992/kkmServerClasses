@@ -27,7 +27,7 @@ class SignMethodCalculation
 	public static function getName($value): string
 	{
 		switch ($value) {
-			case self::FULL_PAYMENT:
+			case self::FULL_PREPAYMENT:
 				return 'Предоплата 100%';
 			case self::PREPAYMENT:
 				return 'Предоплата';
