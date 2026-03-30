@@ -75,6 +75,7 @@ $context = [
 	'vendorDir' => VENDOR_DIR,
 	'frontendDir' => FRONTEND_DIR,
 	'backendDir' => BACKEND_DIR,
+	'TypeCheckString' => $cheque->getChequeType()->getName()
 ];
 $twig->addFilter(
 	new TwigFilter(

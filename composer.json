@@ -31,5 +31,19 @@
             "email": "egor.ermilov1992@gmail.com"
         }
     ],
+    "scripts": {
+        "post-install-cmd": [
+            "mkdir -p var",
+            "chmod 777 var",
+            "mkdir -p var/logs",
+            "chmod 777 var/logs"
+        ],
+        "post-update-cmd": [
+            "mkdir -p var",
+            "chmod 777 var",
+            "mkdir -p var/logs",
+            "chmod 777 var/logs"
+        ]
+    },
     "minimum-stability": "stable"
 }

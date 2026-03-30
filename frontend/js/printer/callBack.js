@@ -25,8 +25,10 @@ function sendCallback(response, action = 'confirm') {
 		'Отправка подтверждения в верхнее приложение',
 	);
 	let params = new URLSearchParams();
-
 	params.set('action', action);
+	if (!response.hasOwnProperty('IdCommand')) {
+		response.IdCommand = document.getElementById('IdCommand').value;
+	}
 	// Отправляем запрос подтверждения
 	myFetch(
 		'/' + callbackUrl + '?' + params.toString(),
