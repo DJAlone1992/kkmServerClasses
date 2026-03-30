@@ -33,7 +33,11 @@ class Logger
 	private static function initialize(): void
 	{
 		// Создаем папку var/logs если не существует
-		$logsDir = __DIR__ . '/../../var/logs';
+		if (!defined('KKM_SERVER_LOGS_DIR') && !is_null(constant('KKM_SERVER_LOGS_DIR'))) {
+			$logsDir = __DIR__ . '/../../var/logs';
+		} else {
+			$logsDir = constant('KKM_SERVER_LOGS_DIR');
+		}
 		if (!is_dir($logsDir)) {
 			mkdir($logsDir, 0777, true);
 		}
@@ -46,7 +50,7 @@ class Logger
 
 		// Общий лог: все уровни, ротация файлов (макс 10 файлов, каждый ~10MB для общего размера ~100MB)
 		$generalHandler = new RotatingFileHandler(
-			$logsDir . '/app.log',
+			$logsDir . '/kkm-server.log',
 			10, // Максимум 10 файлов
 			100,
 			true,
@@ -57,7 +61,7 @@ class Logger
 
 		// Лог ошибок: только ошибки и выше
 		$errorHandler = new RotatingFileHandler(
-			$logsDir . '/error.log',
+			$logsDir . '/kkm-server-error.log',
 			10, // Максимум 10 файлов
 			400,
 			true,

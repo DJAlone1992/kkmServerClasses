@@ -5,4 +5,4 @@
 package-lock.json
 package.json
 .phpunit.result.cache
-/var/
+/var/logs/*
