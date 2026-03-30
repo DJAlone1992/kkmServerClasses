@@ -25,7 +25,7 @@ enum SignMethodCalculation: int
 	public function getName(): string
 	{
 		return match ($this) {
-			self::FULL_PAYMENT => 'Предоплата 100%',
+			self::FULL_PREPAYMENT => 'Предоплата 100%',
 			self::PREPAYMENT => 'Предоплата',
 			self::AVANCE => 'Аванс',
 			self::FULL_PAYMENT => 'Полный расчет',
