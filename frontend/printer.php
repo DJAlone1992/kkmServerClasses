@@ -3,6 +3,7 @@
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
+use Djalone\KkmServerClasses\Cheque\Enums\ChequeType;
 use Djalone\KkmServerClasses\Cheque\Enums\PaymentTypes;
 use Djalone\KkmServerClasses\Services\Serializer;
 use Symfony\Component\HttpFoundation\Request;
@@ -75,7 +76,7 @@ $context = [
 	'vendorDir' => VENDOR_DIR,
 	'frontendDir' => FRONTEND_DIR,
 	'backendDir' => BACKEND_DIR,
-	'TypeCheckString' => $cheque->getChequeType()->getName()
+	'TypeCheckString' => ChequeType::getName($cheque->getChequeType())
 ];
 $twig->addFilter(
 	new TwigFilter(

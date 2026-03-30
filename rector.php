@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use Rector\Config\RectorConfig;
+use Rector\Php55\Rector\String_\StringClassNameToClassConstantRector;
 use Rector\PostRector\Rector\DocblockNameImportingPostRector;
 use Rector\TypeDeclaration\Rector\ClassMethod\AddReturnArrayDocblockBasedOnArrayMapRector;
 use Rector\TypeDeclarationDocblocks\Rector\Class_\AddReturnArrayDocblockFromDataProviderParamRector;
@@ -34,6 +35,9 @@ return RectorConfig::configure()
         DocblockReturnArrayFromDirectArrayInstanceRector::class,
         DocblockVarArrayFromPropertyDefaultsRector::class,
     DocblockVarFromParamDocblockInConstructorRector::class,
+    ])
+    ->withSkip([
+        StringClassNameToClassConstantRector::class,
     ])
     ->withDowngradeSets(php74: true)
     // uncomment to reach your current PHP version
