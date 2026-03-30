@@ -1,6 +1,6 @@
 // Глобальная переменная для хранения модального окна предварительного просмотра чека перед печатью
 let chequePrePrintModal = null;
-
+let processedByButton = false;
 /**
  * Инициализация скрипта после загрузки DOM.
  * Настраивает модальное окно, применяет слушатели событий и форматирует значения.
@@ -17,6 +17,7 @@ document.addEventListener('DOMContentLoaded', function () {
 	const cancelPrintEl = document.getElementById('cancelPrint');
 	if (cancelPrintEl) {
 		cancelPrintEl.addEventListener('click', () => {
+			processedByButton = true;
 			sendCallback({ status: 'denied by user' }, 'denied');
 		});
 	}
@@ -33,6 +34,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
 	//При закрытии вкладки отправляет статус отмены
 	window.addEventListener('beforeunload', (event) => {
+		if (processedByButton) {
+			return;
+		}
 		sendCallback({ status: 'denied by user' }, 'denied');
 	});
 
@@ -159,6 +163,7 @@ function runCheque() {
 	}
 
 	runChequeButton.setAttribute('disabled', 'disabled');
+	processedByButton = true;
 	// Добавляем номер ККТ
 	json.KktNumber = kktNumber;
 	// Выполняем команду печати чека
