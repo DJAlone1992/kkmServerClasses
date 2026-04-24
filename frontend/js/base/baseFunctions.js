@@ -273,3 +273,12 @@ function getCommandParams(action, additionalParams = {}, successCallback = null)
 	// отправляем запрос на бэкенд
 	myFetch(`/Generator.php?${params}`, successCallback);
 }
+
+document.addEventListener('DOMContentLoaded', () => {
+	const tooltipTriggerList = document.querySelectorAll(
+		'[data-bs-toggle="tooltip"]',
+	);
+	const tooltipList = [...tooltipTriggerList].map(
+		(tooltipTriggerEl) => new bootstrap.Tooltip(tooltipTriggerEl),
+	);
+});
