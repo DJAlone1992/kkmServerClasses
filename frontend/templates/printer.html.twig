@@ -8,17 +8,25 @@
 		src="{{ frontendDir }}/js/printer/callBack.js"></script>
 	<script type="text/javascript"
 		src="{{ frontendDir }}/js/printer/printer.js"></script>
-		<script type="text/javascript"
+	<script type="text/javascript"
 		src="{{ frontendDir }}/js/printer/screenParams.js"></script>
 {% endblock javascript %}
 {% block body %}
-	<div class="card w-100 m-5">
-		<div class="card-header"><h2>Печать чека "{{ TypeCheckString }}"</h2></div>
+	<div class="card w-100 m-5 mh-100">
+		<div class="card-header">
+			<h2>
+				{% if cheque.IsFiscalCheck %}
+					Печать чека "{{ TypeCheckString }}"
+				{% else %}
+					Печать не фискального чека
+				{% endif %}
+			</h2>
+		</div>
 		<div class="card-body">
 			<div class="row mb-3">
-				<div class="col-8">
-					<table class="table h-100 table-bordered table-sm table-responsive">
-						<thead>
+				<div class="col-8" style="overflow-y: scroll; max-height: 55vh;">
+					<table class="table h-100 table-bordered table-sm table-responsive table-hover">
+						<thead class="sticky-top">
 							<tr>
 								<th class="text-center">Наименование</th>
 								<th class="text-center">Цена</th>
@@ -29,24 +37,47 @@
 						</thead>
 						<tbody class="table-striped table-hover">
 							{% for item in cheque.CheckStrings %}
-								<tr>
-									<td>{{ item.Register.Name }}</td>
-									<td class="text-center formatValue">
-										{{ item.Register.Price }}
-									</td>
-									<td class="text-center formatValue">
-										{{ item.Register.Quantity }}
-									</td>
-									<td class="text-center formatValue">
-										{{ item.Register.Amount }}
-									</td>
-									<td class="text-center">
-										{{ item.Register.internalPaymentType|paymentType }}
-									</td>
-								</tr>
+								{% set key = item|keys|first %}
+								{% if key == "Register" %}
+									<tr>
+										<td>{{ item.Register.Name }}</td>
+										<td class="text-center formatValue">
+											{{ item.Register.Price }}
+										</td>
+										<td class="text-center formatValue">
+											{{ item.Register.Quantity }}
+										</td>
+										<td class="text-center formatValue">
+											{{ item.Register.Amount }}
+										</td>
+										<td class="text-center">
+											{{ item.Register.internalPaymentType|paymentType }}
+										</td>
+									</tr>
+								{% elseif key == "PrintText" %}
+									<tr>
+										<td colspan="5" class="text-left">
+											{{ item.PrintText.Text }}
+										</td>
+									</tr>
+								{% elseif key == "PrintImage" %}
+									<tr>
+										<td colspan="5" class="text-left">
+											<img src="data:image/bmp;base64,{{
+												item.PrintImage.Image
+												}}" />
+										</td>
+									</tr>
+								{% elseif key == "BarCode" %}
+									<tr>
+										<td colspan="5" class="text-left">
+											{{ barcode(item.BarCode.Barcode,item.BarCode.BarcodeType) }}
+										</td>
+									</tr>
+								{% endif %}
 							{% endfor %}
 						</tbody>
-						<tfoot>
+						<tfoot class="sticky-bottom">
 							<tr>
 								<td colspan="3" class="text-end"><strong>Итого:</strong></td>
 								<td class="text-center">
@@ -248,9 +279,7 @@
 							</div>
 							<div class="row g-3 align-items-center mb-1">
 								<div class="col-3 text-end">
-									<label class="form-label" for="cashierVatin">
-										Смена:
-									</label>
+									<label class="form-label" for="cashierVatin">Смена:</label>
 								</div>
 								<div class="col-9">
 									<div class="form-control">
@@ -353,11 +382,16 @@
 				</div>
 				<div class="modal-body">
 					<h2>Внимание!</h2>
-					<p>Вы собираетесь провести фискальный чек на суммы</p>
+					{% if cheque.IsFiscalCheck %}
+						<p>Вы собираетесь провести фискальный чек на суммы</p>
+					{% else %}
+						<p>Вы собираетесь провести не фискальный чек</p>
+					{% endif %}
 					<ul>
 						<li id="modalCashSum"><strong>100</strong> наличными</li>
 						<li id="modalElectronicSum"><strong>100</strong> безналичными</li>
 					</ul>
+
 					<p>
 						Если вы сомневаетесь, то это последнее сообщение, когда можно
 						отменить операцию.

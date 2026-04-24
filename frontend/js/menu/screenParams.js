@@ -2,11 +2,13 @@ let currentShiftState = null;
 let errorsInKkt = null;
 let balanceCash = null;
 let FFDVersion = null;
+let LineLength = null;
 document.addEventListener('DOMContentLoaded', function () {
 	currentShiftState = document.getElementById('currentShiftState');
 	errorsInKkt = document.getElementById('errorsInKkt');
 	balanceCash = document.getElementById('balanceCash');
 	FFDVersion = document.getElementById('FFDVersion');
+	LineLength = document.getElementById('LineLength');
 });
 function screenParams() {
 	// Показываем индикатор загрузки
@@ -26,6 +28,10 @@ function screenParams() {
 	}
 	if (FFDVersion) {
 		FFDVersion.innerHTML =
+			'<span class="spinner-grow spinner-grow-sm" role="status"></span>';
+	}
+	if (LineLength) {
+		LineLength.innerHTML =
 			'<span class="spinner-grow spinner-grow-sm" role="status"></span>';
 	}
 
@@ -110,4 +116,17 @@ function showScreenParams(resultJson) {
 		errorsInKkt.innerHTML = errors ? 'Есть ошибки' : 'Нет ошибок';
 		errorsInKkt.classList.add(errors ? 'text-danger' : 'text-success');
 	}
+	getCommandParams('GetLineLength', {}, showLineLength);
+}
+
+function showLineLength(resultJson) {
+	// Проверяем наличие входных данных
+	if (!resultJson || typeof resultJson !== 'object') {
+		console.error('Ошибка: Невалидные данные статуса ККТ', resultJson);
+		currentShiftState.innerHTML = 'Ошибка получения данных';
+		errorsInKkt.innerHTML = 'Ошибка получения данных';
+		return;
+	}
+	LineLength.innerHTML = resultJson.LineLength;
+	localStorage.setItem('kkmServerClasses.LineLength', LineLength);
 }

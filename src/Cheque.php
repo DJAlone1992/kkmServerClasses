@@ -2,13 +2,16 @@
 
 namespace Djalone\KkmServerClasses;
 
+use Djalone\KkmServerClasses\Cheque\Enums\BarCodeType;
 use Djalone\KkmServerClasses\Cheque\Enums\ChequeType;
 use Djalone\KkmServerClasses\Cheque\Enums\PaymentTypes;
+use Djalone\KkmServerClasses\Cheque\Items\BarCode;
 use Djalone\KkmServerClasses\Cheque\Items\Image;
 use Djalone\KkmServerClasses\Cheque\Items\Item;
 use Djalone\KkmServerClasses\Cheque\Items\Position;
 use Djalone\KkmServerClasses\Cheque\Items\Text;
 use Djalone\KkmServerClasses\Services\Helper;
+
 /**
  * Команда печати чека.
  */
@@ -19,6 +22,16 @@ class Cheque extends Command
 	 * @var array<Text> $texts
 	 */
 	private array $texts = [];
+	/**
+	 * Список изображений
+	 * @var array<Image> $images
+	 */
+	private array $images = [];
+	/**
+	 * Список штрих-кодов
+	 * @var array<BarCode> $barcodes
+	 */
+	private array $barcodes = [];
 	/**
 	 * Список позиций
 	 * @var array<Position> $positions
@@ -153,7 +166,9 @@ class Cheque extends Command
 	 */
 	public function getItems(): array
 	{
-		return array_merge($this->texts, $this->positions);
+		$items = array_replace($this->texts, $this->positions, $this->images, $this->barcodes);
+		ksort($items);
+		return $items;
 	}
 
 	/**
@@ -219,15 +234,21 @@ class Cheque extends Command
 	/**
 	 * Добавить элемент (позицию или текст) в чек.
 	 *
-	 * @param Position|Text|Image $item Добавляемый элемент.
+	 * @param Item|string $item Добавляемый элемент.
 	 *
 	 * @return static Текущий объект для цепочки вызовов.
 	 */
-	public function addItem(Item $item)
+	public function addItem(Item|string $item): static
 	{
 		if ($item instanceof Position) {
 			$this->addPosition($item);
 		} elseif ($item instanceof Text) {
+			$this->addText($item);
+		} elseif ($item instanceof Image) {
+			$this->addImage($item);
+		} elseif ($item instanceof BarCode) {
+			$this->addBarCode($item);
+		} elseif (is_string($item)) {
 			$this->addText($item);
 		}
 		return $this;
@@ -235,16 +256,48 @@ class Cheque extends Command
 	/**
 	 * Добавить текстовый элемент в чек.
 	 *
-	 * @param Text $text Текстовый элемент.
+	 * @param Text|string $text Текстовый элемент.
 	 * @return static Текущий объект для цепочки.
 	 */
-	public function addText(Text $text)
+	public function addText(Text|string $text): static
 	{
+		if (!$text instanceof Text) {
+			$text = new Text((string)$text);
+		}
 		$this->texts[$this->itemsCounter] = $text;
 		$this->itemsCounter++;
 		return $this;
 	}
-
+	/**
+	 * Добавить изображение в чек.
+	 *
+	 * @param Image|string $imageOrPath Изображение или путь к изображению.
+	 * @return static Текущий объект для цепочки.
+	 */
+	public function addImage(Image|string $imageOrPath): static
+	{
+		if (!$imageOrPath instanceof Image) {
+			$imageOrPath = new Image((string)$imageOrPath);
+		}
+		$this->images[$this->itemsCounter] = $imageOrPath;
+		$this->itemsCounter++;
+		return $this;
+	}
+	/**
+	 * Добавить штрих-код в чек.
+	 *
+	 * @param BarCode|string $objectOrText Штрих-клж или текст штрих-кода.
+	 * @return static Текущий объект для цепочки.
+	 */
+	public function addBarCode(BarCode|string $objectOrText): static
+	{
+		if (!$objectOrText instanceof BarCode) {
+			$objectOrText = new BarCode((string)$objectOrText, BarCodeType::QR);
+		}
+		$this->barcodes[$this->itemsCounter] = $objectOrText;
+		$this->itemsCounter++;
+		return $this;
+	}
 	/**
 	 * Добавить позицию товара и скорректировать суммы в зависимости от типа оплаты.
 	 *
@@ -304,6 +357,36 @@ class Cheque extends Command
 		return $this;
 	}
 	/**
+	 * Заменить список изображений.
+	 *
+	 * @param array<Image> $images
+	 * @return static Текущий объект для цепочки.
+	 */
+	public function setImages(array $images): static
+	{
+		if (count($images) < 1) {
+			return $this;
+		}
+		$this->images = $images;
+		$this->updateCounter($images);
+		return $this;
+	}
+	/**
+	 * Заменить список штрих-кодов.
+	 *
+	 * @param array<BarCode> $barcodes
+	 * @return static Текущий объект для цепочки.
+	 */
+	public function setBarCodes(array $barcodes): static
+	{
+		if (count($barcodes) < 1) {
+			return $this;
+		}
+		$this->barcodes = $barcodes;
+		$this->updateCounter($barcodes);
+		return $this;
+	}
+	/**
 	 * Обновить счетчик позиций.
 	 * @param array $array Массив элементов.
 	 */
@@ -334,6 +417,24 @@ class Cheque extends Command
 		return $this->texts;
 	}
 
+	/**
+	 * Получить массив изображений.
+	 *
+	 * @return array<Image>
+	 */
+	public function getImages(): array
+	{
+		return $this->images;
+	}
+	/**
+	 * Получить массив  штрих-кодов.
+	 *
+	 * @return array<BarCode>
+	 */
+	public function getBarCodes(): array
+	{
+		return $this->barcodes;
+	}
 	/**
 	 * Установить общую сумму наличных.
 	 *
@@ -504,34 +605,49 @@ class Cheque extends Command
 	public function isValid(): bool
 	{
 		$error = !parent::isValid();
+		if ($this->getIsFiscal()) {
+			if (strlen($this->clientAddress) < 3) {
+				$error = true;
+				$this->errors[] =
+					'Контактная информация клиента не может быть короче 3 символов';
+			}
 
-		if (strlen($this->clientAddress) < 3) {
-			$error = true;
-			$this->errors[] =
-				'Контактная информация клиента не может быть короче 3 символов';
+			if (strlen($this->clientAddress) < 3) {
+				$error = true;
+				$this->errors[] =
+					'Контактная информация клиента не может быть короче 3 символов';
+			}
+
+			if (strlen($this->clientInfo) < 3) {
+				$error = true;
+				$this->errors[] =
+					'Информация о клиенте не может быть короче 3 символов';
+			}
+
+			if (
+				!preg_match(
+					'/^((8|\+7)[\- ]?)?(\(?\d{3}\)?[\- ]?)?[\d\- ]{7,10}$/',
+					$this->clientAddress
+				) &&
+				!preg_match(
+					'/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/',
+					$this->clientAddress
+				)
+			) {
+				$error = true;
+				$this->errors[] =
+					'Контактная информация не является корректным номером телефона или E-mail адресом';
+			}
+			if (count($this->getPositions()) === 0) {
+				$error = true;
+				$this->errors[] = 'Фискальный чек не содержит ни фискальной одной позиции';
+			}
+		} else {
+			if (count($this->getPositions()) !== 0) {
+				$error = true;
+				$this->errors[] = 'Не фискальный чек содержит ни фискальные позиции';
+			}
 		}
-
-		if (strlen($this->clientInfo) < 3) {
-			$error = true;
-			$this->errors[] =
-				'Информация о клиенте не может быть короче 3 символов';
-		}
-
-		if (
-			!preg_match(
-				'/^((8|\+7)[\- ]?)?(\(?\d{3}\)?[\- ]?)?[\d\- ]{7,10}$/',
-				$this->clientAddress
-			) &&
-			!preg_match(
-				'/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/',
-				$this->clientAddress
-			)
-		) {
-			$error = true;
-			$this->errors[] =
-				'Контактная информация не является корректным номером телефона или E-mail адресом';
-		}
-
 		if (count($this->getItems()) == 0) {
 			$error = true;
 			$this->errors[] = 'Чек не содержит ни одной позиции';
@@ -566,5 +682,19 @@ class Cheque extends Command
 	): Cheque {
 		return (new Cheque($cashierName, $cashierVatin, $kktNumber, $idCommand))
 			->setIsFiscal(false);
+	}
+	/**
+	 * Добавление многострочного текста
+	 * @param string $text Текст
+	 * @param string $separator Разделитель строк в тексте
+	 * @return static Текущий объект для цепочки.
+	 */
+	public function addMultipleLineText(string $text, string $separator = "\n"): static
+	{
+		$array = explode($separator, $text);
+		foreach ($array as $line) {
+			$this->addText(new Text((string) $line));
+		}
+		return $this;
 	}
 }

@@ -52,7 +52,7 @@ class GetDataCheck extends Command
 
 
     /**
-     * @return array<string, string>
+     * @return array<string, int>
      */
     public function toArray(): array
     {

@@ -6,7 +6,7 @@
  * Объект модального окна в bootstrap
  */
 let myModal = null;
-
+let eventAppeared = false;
 /**
  * Инициализация при загрузке DOM
  */
@@ -22,6 +22,13 @@ document.addEventListener('DOMContentLoaded', function () {
 	myModal = new bootstrap.Modal(modalElement);
 	// Добавляем слушатель события скрытия модального окна
 	modalElement.addEventListener('hidden.bs.modal', resetOperationModalState);
+	// Добавляем слушатель события показа модального окна
+	modalElement.addEventListener('shown.bs.modal', function () {
+		setTimeout(() => {
+			if (eventAppeared) { return; }
+			showStatusInfo('Похоже что приложение связи с ФР не отвечает. Перезапустите операцию')
+		}, 10000);
+	});
 });
 
 /**
@@ -77,6 +84,7 @@ function changeOperationModalText(position, text) {
  * @returns {void}
  */
 function showOperationModal(pendingName = undefined, caption = undefined) {
+	eventAppeared = false;
 	// Меняем текст заголовка
 	changeOperationModalText('operationStatusLabel', caption);
 	// Меняем текст наименования операции
@@ -95,6 +103,7 @@ function showOperationModal(pendingName = undefined, caption = undefined) {
  * @returns {void}
  */
 function hideOperationModal() {
+	eventAppeared = false;
 	// Проверяем, инициализировано ли модальное окно
 	if (myModal) {
 		// Скрываем модальное окно
@@ -112,6 +121,7 @@ function hideOperationModal() {
  * @param {string} type - Тип сообщения (success, info, danger)
  */
 function appendAlert(message, type) {
+	eventAppeared = true;
 	// Определяем заголовок в зависимости от типа
 	let header = '';
 	switch (type) {

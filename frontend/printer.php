@@ -3,6 +3,7 @@
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
+use Com\Tecnick\Barcode\Barcode;
 use Djalone\KkmServerClasses\Cheque\Enums\ChequeType;
 use Djalone\KkmServerClasses\Cheque\Enums\PaymentTypes;
 use Djalone\KkmServerClasses\Services\Serializer;
@@ -11,6 +12,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Twig\Environment;
 use Twig\Loader\FilesystemLoader;
 use Twig\TwigFilter;
+use Twig\TwigFunction;
 
 if (!class_exists('Symfony\Component\HttpFoundation\Request')) {
 	require_once __DIR__ . '/../vendor/autoload.php';
@@ -81,12 +83,47 @@ $context = [
 $twig->addFilter(
 	new TwigFilter(
 		'paymentType',
-		fn(?int $value) => PaymentTypes::getShortName(
-			is_null($value)
-				? PaymentTypes::Cash
-				: (PaymentTypes::tryFrom($value) ?:
-					PaymentTypes::Cash)
-		)
+		fn(?int $value) => (is_null($value)
+			? PaymentTypes::Cash
+			: (PaymentTypes::tryFrom($value) ?:
+				PaymentTypes::Cash)
+		)->getShortName()
+	)
+);
+$twig->addFunction(
+	new TwigFunction(
+		'barcode',
+		function (string $barcode, string $type) {
+			$length = 256;
+			switch (strtoupper($type)) {
+				case 'EAN13':
+				case 'PDF417':
+					break;
+				case 'CODE39':
+					$type = 'C39';
+					break;
+				case 'CODE128':
+					$type = 'C128';
+					break;
+				case 'QR':
+					$type = 'QRCODE';
+					$length = 128;
+					break;
+				default:
+					return '';
+			}
+			$barcodeObj = new Barcode();
+			$gd = $barcodeObj->getBarcodeObj(
+				$type,
+				$barcode
+			)->setBackgroundColor('white')
+				->setSize($length, 128, [2, 2, 2, 2])
+				->getGd();
+			$tempName = tempnam(sys_get_temp_dir(), 'img');
+			imagebmp($gd, $tempName);
+			return '<img src="data:image/bmp;base64,' . base64_encode(file_get_contents($tempName)) . '" />';
+		},
+		['is_safe' => ['html']]
 	)
 );
 $response = new Response(
