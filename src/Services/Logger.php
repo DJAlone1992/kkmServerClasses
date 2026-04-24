@@ -33,7 +33,7 @@ class Logger
 	private static function initialize(): void
 	{
 		// Создаем папку var/logs если не существует
-		if (!defined('KKM_SERVER_LOGS_DIR') || !is_null(constant('KKM_SERVER_LOGS_DIR'))) {
+		if (!defined('KKM_SERVER_LOGS_DIR') || constant('KKM_SERVER_LOGS_DIR') === null) {
 			$logsDir = __DIR__ . '/../../var/logs';
 		} else {
 			$logsDir = constant('KKM_SERVER_LOGS_DIR');
