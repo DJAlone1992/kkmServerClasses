@@ -16,6 +16,7 @@ use Djalone\KkmServerClasses\PaymentCash;
 use Djalone\KkmServerClasses\XReport;
 use Djalone\KkmServerClasses\DeviceList;
 use Djalone\KkmServerClasses\GetDataCheck;
+use Djalone\KkmServerClasses\GetLineLength;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -173,6 +174,8 @@ function createCommand(Request $request)
 				$command->setFiscalNumber((int) $fiscalNumber)->setNumberOfCopies((int) $numberOfCopies);
 				return $command;
 			}
+		case 'GetLineLength':
+			return new GetLineLength();
 		default:
 			return null; // Неизвестная команда
 	}
