@@ -33,7 +33,7 @@ class Logger
 	private static function initialize(): void
 	{
 		// Создаем папку var/logs если не существует
-		if (!defined('KKM_SERVER_LOGS_DIR') && !is_null(constant('KKM_SERVER_LOGS_DIR'))) {
+		if (!defined('KKM_SERVER_LOGS_DIR') || !is_null(constant('KKM_SERVER_LOGS_DIR'))) {
 			$logsDir = __DIR__ . '/../../var/logs';
 		} else {
 			$logsDir = constant('KKM_SERVER_LOGS_DIR');
@@ -52,7 +52,7 @@ class Logger
 		$generalHandler = new RotatingFileHandler(
 			$logsDir . '/kkm-server.log',
 			10, // Максимум 10 файлов
-			\Monolog\Level::Debug,
+			100,
 			true,
 			0664,
 			true
@@ -63,7 +63,7 @@ class Logger
 		$errorHandler = new RotatingFileHandler(
 			$logsDir . '/kkm-server-error.log',
 			10, // Максимум 10 файлов
-			\Monolog\Level::Error,
+			400,
 			true,
 			0664,
 			true
