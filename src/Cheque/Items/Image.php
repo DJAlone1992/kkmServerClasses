@@ -32,14 +32,26 @@ class Image extends Item
     private function convertImage(string $imagePath)
     {
         $ext = strtolower(pathinfo($imagePath, PATHINFO_EXTENSION));
-        $gd = match ($ext) {
-            "jpg", "jpeg" => imagecreatefromjpeg($imagePath),
-            "png" => imagecreatefrompng($imagePath),
-            "gif" => imagecreatefromgif($imagePath),
-            'webp' => imagecreatefromwebp($imagePath),
-            'bmp' => imagecreatefrombmp($imagePath),
-            default => throw new RuntimeException("Invalid file format"),
-        };
+        switch ($ext) {
+            case "jpg":
+            case "jpeg":
+                $gd = imagecreatefromjpeg($imagePath);
+                break;
+            case "png":
+                $gd = imagecreatefrompng($imagePath);
+                break;
+            case "gif":
+                $gd = imagecreatefromgif($imagePath);
+                break;
+            case 'webp':
+                $gd = imagecreatefromwebp($imagePath);
+                break;
+            case 'bmp':
+                $gd = imagecreatefrombmp($imagePath);
+                break;
+            default:
+                throw new RuntimeException("Invalid file format");
+        }
 
         $this->imagetograyscale($gd);
         $xSize = imagesx($gd);
@@ -76,7 +88,7 @@ class Image extends Item
      * @param string $imageBase64
      * @return static
      */
-    public function setImage(string $imageBase64): static
+    public function setImage(string $imageBase64)
     {
         $this->image = $imageBase64;
         return $this;

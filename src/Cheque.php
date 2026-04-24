@@ -238,7 +238,7 @@ class Cheque extends Command
 	 *
 	 * @return static Текущий объект для цепочки вызовов.
 	 */
-	public function addItem(Item|string $item): static
+	public function addItem($item)
 	{
 		if ($item instanceof Position) {
 			$this->addPosition($item);
@@ -259,7 +259,7 @@ class Cheque extends Command
 	 * @param Text|string $text Текстовый элемент.
 	 * @return static Текущий объект для цепочки.
 	 */
-	public function addText(Text|string $text): static
+	public function addText($text)
 	{
 		if (!$text instanceof Text) {
 			$text = new Text((string)$text);
@@ -274,7 +274,7 @@ class Cheque extends Command
 	 * @param Image|string $imageOrPath Изображение или путь к изображению.
 	 * @return static Текущий объект для цепочки.
 	 */
-	public function addImage(Image|string $imageOrPath): static
+	public function addImage($imageOrPath)
 	{
 		if (!$imageOrPath instanceof Image) {
 			$imageOrPath = new Image((string)$imageOrPath);
@@ -289,7 +289,7 @@ class Cheque extends Command
 	 * @param BarCode|string $objectOrText Штрих-клж или текст штрих-кода.
 	 * @return static Текущий объект для цепочки.
 	 */
-	public function addBarCode(BarCode|string $objectOrText): static
+	public function addBarCode($objectOrText)
 	{
 		if (!$objectOrText instanceof BarCode) {
 			$objectOrText = new BarCode((string)$objectOrText, BarCodeType::QR);
@@ -362,7 +362,7 @@ class Cheque extends Command
 	 * @param array<Image> $images
 	 * @return static Текущий объект для цепочки.
 	 */
-	public function setImages(array $images): static
+	public function setImages(array $images)
 	{
 		if (count($images) < 1) {
 			return $this;
@@ -377,7 +377,7 @@ class Cheque extends Command
 	 * @param array<BarCode> $barcodes
 	 * @return static Текущий объект для цепочки.
 	 */
-	public function setBarCodes(array $barcodes): static
+	public function setBarCodes(array $barcodes)
 	{
 		if (count($barcodes) < 1) {
 			return $this;
@@ -689,7 +689,7 @@ class Cheque extends Command
 	 * @param string $separator Разделитель строк в тексте
 	 * @return static Текущий объект для цепочки.
 	 */
-	public function addMultipleLineText(string $text, string $separator = "\n"): static
+	public function addMultipleLineText(string $text, string $separator = "\n")
 	{
 		$array = explode($separator, $text);
 		foreach ($array as $line) {

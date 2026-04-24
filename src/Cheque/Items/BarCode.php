@@ -13,7 +13,7 @@ use RuntimeException;
  */
 class BarCode extends Item
 {
-    private BarCodeType $type;
+    private string $type;
     private string $body;
     /**
      * Конструктор штрих-кода с проверкой контрольной цифры.
@@ -23,7 +23,7 @@ class BarCode extends Item
      * @throws \InvalidArgumentException при неверной длине или формате.
      * @throws \Exception при несовпадении контрольной цифры.
      */
-    public function __construct(string $barcode = '', BarCodeType|string $type = BarCodeType::QR)
+    public function __construct(string $barcode = '', $type = BarCodeType::QR)
     {
         $this->setType($type);
         $this->setBody($barcode);
@@ -31,9 +31,9 @@ class BarCode extends Item
     /**
      * Получить тип штрих-кода.
      *
-     * @return BarCodeType
+     * @return string
      */
-    public function getType(): BarCodeType
+    public function getType(): string
     {
         return $this->type;
     }
@@ -51,14 +51,12 @@ class BarCode extends Item
     /**
      * Установить тип штрих-кода.
      *
-     * @param BarCodeType|string $type
+     * @param string $type
      * @return static
      */
-    public function setType(BarCodeType|string $type)
+    public function setType($type)
     {
-        if (!$type instanceof BarCodeType) {
-            $type = BarCodeType::from($type);
-        }
+        $type = BarCodeType::tryFrom($type);
         $this->type = $type;
         return $this;
     }
@@ -69,7 +67,7 @@ class BarCode extends Item
      * @param string $body
      * @return static
      */
-    public function setBody(string $body):static
+    public function setBody(string $body)
     {
         if (!$this->type) {
             throw new RuntimeException('Barcode type is not set');
@@ -87,7 +85,7 @@ class BarCode extends Item
      * @throws Exception
      * @return void
      */
-    private function checkData():void
+    private function checkData(): void
     {
         if ($this->type !== BarCodeType::EAN13) {
             return;
@@ -127,7 +125,7 @@ class BarCode extends Item
     {
         return [
             'BarCode' => [
-                'BarcodeType' => $this->type->value,
+                'BarcodeType' => $this->type,
                 'Barcode' => $this->body
             ]
         ];
