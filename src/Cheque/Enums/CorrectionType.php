@@ -2,29 +2,30 @@
 
 namespace Djalone\KkmServerClasses\Cheque\Enums;
 
-/**
- * Тип корректировки Тег 1173
- */
-enum CorrectionType: int
-{
-    // 0 – самостоятельно;
-    case INDIVIDUALLY = 0;
-        // 1 – по предписанию
-    case PRESCRIPTION = 1;
+use ReflectionClass;
 
+class CorrectionType
+{
+    public const INDIVIDUALLY = 0;
+    public const PRESCRIPTION = 1;
     public function getName(): string
     {
-        return match ($this) {
-            self::INDIVIDUALLY => 'Самостоятельно',
-            self::PRESCRIPTION => 'По предписанию',
-            default => 'Не известно'
-        };
+        switch ($this) {
+            case self::INDIVIDUALLY:
+                return 'Самостоятельно';
+            case self::PRESCRIPTION:
+                return 'По предписанию';
+            default:
+                return 'Не известно';
+        }
     }
     public static function getArray(): array
     {
+        $reflection = new ReflectionClass(self::class);
+        $cases = $reflection->getConstants();
         $result = [];
-        foreach (self::cases() as $value) {
-            $result[$value->value] = $value->getName();
+        foreach ($cases as $value) {
+            $result[$value] = self::getName();
         }
         return $result;
     }

@@ -54,7 +54,7 @@ class BarCodeType
         $cases = $reflection->getConstants();
         $result = [];
         foreach ($cases as $value) {
-            $result[$value] = self::getName($value);
+            $result[$value] = self::getName();
         }
         return $result;
     }

@@ -36,7 +36,11 @@ class CorrectionCheque extends Cheque
         parent::__construct($cashierName, $cashierVatin, $kktNumber, $idCommand);
         $this->setIsFiscal(true);
     }
-    public function setCorrectionType(CorrectionType $correctionType): static
+    /**
+     * @return static
+     * @param mixed $correctionType
+     */
+    public function setCorrectionType($correctionType)
     {
         $this->correctionType = $correctionType;
         return $this;
@@ -47,7 +51,10 @@ class CorrectionCheque extends Cheque
         return $this->correctionType;
     }
 
-    public function setCorrectionBaseDate(DateTime $correctionBaseDate): static
+    /**
+     * @return static
+     */
+    public function setCorrectionBaseDate(DateTime $correctionBaseDate)
     {
         $this->correctionBaseDate = $correctionBaseDate;
         return $this;
@@ -56,7 +63,10 @@ class CorrectionCheque extends Cheque
     {
         return $this->correctionBaseDate;
     }
-    public function setCorrectionBaseNumber(string $correctionBaseNumber): static
+    /**
+     * @return static
+     */
+    public function setCorrectionBaseNumber(string $correctionBaseNumber)
     {
         $this->correctionBaseNumber = $correctionBaseNumber;
         return $this;
@@ -65,7 +75,10 @@ class CorrectionCheque extends Cheque
     {
         return $this->correctionBaseNumber;
     }
-    public function setCorrectionBaseName(string $correctionBaseName): static
+    /**
+     * @return static
+     */
+    public function setCorrectionBaseName(string $correctionBaseName)
     {
         $this->correctionBaseName = $correctionBaseName;
         return $this;
@@ -87,7 +100,7 @@ class CorrectionCheque extends Cheque
      * @return static Текущий объект для цепочки.
      */
     #[Override]
-    public function setChequeType(ChequeType $chequeType): static
+    public function setChequeType(ChequeType $chequeType)
     {
         if (!$chequeType->getForCorrection()) {
             throw new InvalidArgumentException("Чек коррекции не может иметь тип чека продажи/возврата");
@@ -116,7 +129,7 @@ class CorrectionCheque extends Cheque
         string $cashierVatin = '',
         string $kktNumber = '',
         string $idCommand = ''
-    ): static {
+    ) {
         return new static($cashierName, $cashierVatin, $kktNumber, $idCommand);
     }
 }

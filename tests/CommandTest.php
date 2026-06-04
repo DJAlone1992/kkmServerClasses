@@ -14,6 +14,9 @@ final class CommandTest extends TestCase
         $command = new class extends Command {
             protected string $command = 'TestCommand';
 
+            /**
+             * @return array<string, string>
+             */
             public function toArray(): array
             {
                 return ['CustomField' => 'custom'];
@@ -50,6 +53,9 @@ final class CommandTest extends TestCase
         $command = new class extends Command {
             protected string $command = 'TestCommand';
 
+            /**
+             * @return array{}
+             */
             public function toArray(): array
             {
                 return [];
