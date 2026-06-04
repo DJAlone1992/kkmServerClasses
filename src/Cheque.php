@@ -11,6 +11,7 @@ use Djalone\KkmServerClasses\Cheque\Items\Item;
 use Djalone\KkmServerClasses\Cheque\Items\Position;
 use Djalone\KkmServerClasses\Cheque\Items\Text;
 use Djalone\KkmServerClasses\Services\Helper;
+use InvalidArgumentException;
 
 /**
  * Команда печати чека.
@@ -65,7 +66,7 @@ class Cheque extends Command
 	/**
 	 * @var ChequeType $chequeType Тип чека
 	 */
-	private ChequeType $chequeType = ChequeType::INCOME;
+	protected ChequeType $chequeType = ChequeType::INCOME;
 	/**
 	 * @var bool $isFiscal
 	 */
@@ -494,10 +495,14 @@ class Cheque extends Command
 	 * Установить тип чека.
 	 *
 	 * @param ChequeType $chequeType
+	 * @throws InvalidArgumentException
 	 * @return static Текущий объект для цепочки.
 	 */
 	public function setChequeType(ChequeType $chequeType): static
 	{
+		if ($chequeType->getForCorrection()) {
+			throw new InvalidArgumentException("Чек продажи/возврата не может иметь тип чека корректировки");
+		}
 		$this->chequeType = $chequeType;
 		return $this;
 	}
@@ -596,6 +601,10 @@ class Cheque extends Command
 		];
 	}
 
+	protected function isValidType(): bool
+	{
+		return !$this->getChequeType()->getForCorrection();
+	}
 	/**
 	 * Проверка валидности чека.
 	 *
@@ -605,6 +614,10 @@ class Cheque extends Command
 	{
 		$error = !parent::isValid();
 		if ($this->getIsFiscal()) {
+			if (!$this->isValidType()) {
+				$error = true;
+				$this->errors[] = 'Тип чека не может быть корректирующим';
+			}
 			if (strlen($this->clientAddress) < 3) {
 				$error = true;
 				$this->errors[] =
