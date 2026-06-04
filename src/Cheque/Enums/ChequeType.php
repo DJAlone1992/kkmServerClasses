@@ -59,4 +59,17 @@ class ChequeType
         }
         return $result;
     }
+    /**
+     * Проверка типа, что это тип корректировки
+     * @return bool
+     */
+    public function getForCorrection(): bool
+    {
+        return in_array($this, [
+            self::INCOME_CORRECTION,
+            self::INCOME_RETURN_CORRECTION,
+            self::OUTCOME_CORRECTION,
+            self::OUTCOME_RETURN_CORRECTION
+        ]);
+    }
 }
