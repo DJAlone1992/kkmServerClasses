@@ -61,11 +61,12 @@ class ChequeType
     }
     /**
      * Проверка типа, что это тип корректировки
+     * @param int $value
      * @return bool
      */
-    public function getForCorrection(): bool
+    public static function getForCorrection($value): bool
     {
-        return in_array($this, [
+        return in_array($value, [
             self::INCOME_CORRECTION,
             self::INCOME_RETURN_CORRECTION,
             self::OUTCOME_CORRECTION,

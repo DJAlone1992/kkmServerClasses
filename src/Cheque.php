@@ -501,7 +501,7 @@ class Cheque extends Command
 	 */
 	public function setChequeType($chequeType)
 	{
-		if ($chequeType->getForCorrection()) {
+		if (ChequeType::getForCorrection($chequeType)) {
 			throw new InvalidArgumentException("Чек продажи/возврата не может иметь тип чека корректировки");
 		}
 		$this->chequeType = $chequeType;
@@ -604,7 +604,7 @@ class Cheque extends Command
 
 	protected function isValidType(): bool
 	{
-		return !$this->getChequeType()->getForCorrection();
+		return !ChequeType::getForCorrection($this->getChequeType());
 	}
 	/**
 	 * Проверка валидности чека.
