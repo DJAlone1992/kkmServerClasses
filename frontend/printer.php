@@ -84,10 +84,8 @@ $twig->addFilter(
 	new TwigFilter(
 		'paymentType',
 		fn(?int $value) => (is_null($value)
-			? PaymentTypes::Cash
-			: (PaymentTypes::tryFrom($value) ?:
-				PaymentTypes::Cash)
-		)->getShortName()
+			?: PaymentTypes::getShortName($value)
+		)
 	)
 );
 $twig->addFunction(
